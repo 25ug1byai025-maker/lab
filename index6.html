@@ -1,0 +1,889 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binomial PMF Visualizer</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        :root {
+            --ink: #183333;
+            --muted: #718585;
+            --teal: #087f8c;
+            --teal-light: #dff5f2;
+            --line: #e4ecea;
+            --bg: #f5f8f7;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        header {
+            height: 76px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: white;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 39px;
+            height: 39px;
+            border-radius: 12px;
+            background: var(--teal);
+            color: white;
+            font-size: 22px;
+        }
+
+        nav {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #718585;
+            font-size: 13px;
+            padding: 10px 13px;
+            border-radius: 8px;
+        }
+
+        nav a.active,
+        nav a:hover {
+            color: var(--teal);
+            background: var(--teal-light);
+        }
+
+        main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 38px 22px 50px;
+        }
+
+        .heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: var(--teal);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+            margin-bottom: 11px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 4vw, 38px);
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 640px;
+        }
+
+        .status {
+            padding: 9px 13px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid var(--line);
+            color: var(--teal);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            padding: 21px;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-note {
+            margin-top: 7px;
+            font-size: 11px;
+            color: #8b9b99;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 285px minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 21px 23px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .card-header h2 {
+            font-size: 17px;
+            margin-bottom: 7px;
+        }
+
+        .card-header p {
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .controls {
+            padding: 23px;
+        }
+
+        .field {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d7e3e0;
+            background: #fbfdfc;
+            border-radius: 9px;
+            outline: none;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .field input:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px #dff5f2;
+        }
+
+        .hint {
+            display: block;
+            margin-top: 7px;
+            font-size: 11px;
+            color: #91a09e;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            margin: 4px 0 23px;
+        }
+
+        .toggle-row input {
+            accent-color: var(--teal);
+            width: 17px;
+            height: 17px;
+        }
+
+        .toggle-row label {
+            margin: 0;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 13px;
+            background: var(--teal);
+            border: 0;
+            border-radius: 9px;
+            color: white;
+            font-weight: 750;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: #066c76;
+        }
+
+        .error {
+            display: none;
+            color: #b42318;
+            background: #fff0ee;
+            border: 1px solid #ffd0ca;
+            padding: 11px;
+            margin-top: 13px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .chart-card {
+            min-width: 0;
+        }
+
+        .chart-heading {
+            padding: 22px 24px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .chart-heading h2 {
+            font-size: 18px;
+            margin-bottom: 7px;
+        }
+
+        .chart-heading p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .distribution-tag {
+            background: var(--teal-light);
+            color: var(--teal);
+            padding: 7px 10px;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 370px;
+            padding: 12px 18px 20px;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 0 24px 22px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-box {
+            width: 11px;
+            height: 11px;
+            border-radius: 3px;
+            background: #55b9b0;
+        }
+
+        .legend-line {
+            width: 22px;
+            border-top: 2px dashed #e58c46;
+        }
+
+        .info-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .info-box h3 {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .formula {
+            color: var(--teal);
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            color: #94a5a2;
+            font-size: 11px;
+        }
+
+        @media (max-width: 850px) {
+            header {
+                height: auto;
+                padding: 18px 5%;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            main {
+                padding: 28px 14px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .info-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 310px;
+                padding: 8px;
+            }
+
+            nav {
+                gap: 0;
+            }
+
+            nav a {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="brand-mark">ƒ</div>
+        <span>Probability Studio</span>
+    </div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#" class="active">PMF Graph</a>
+        <a href="#">CDF</a>
+        <a href="#">Poisson</a>
+        <a href="#">Geometric</a>
+    </nav>
+</header>
+
+<main>
+    <section class="heading">
+        <div>
+            <div class="eyebrow">Data visualization / Binomial distribution</div>
+            <h1>Binomial PMF Visualizer</h1>
+            <p class="subtitle">
+                Explore how probability is distributed across all possible
+                numbers of successes. Adjust the parameters and observe
+                how the distribution changes.
+            </p>
+        </div>
+
+        <div class="status">● Interactive graph</div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-label">Expected Value / Mean</div>
+            <div class="stat-value" id="meanValue">7.00</div>
+            <div class="stat-note">μ = n × p</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Highest Probability</div>
+            <div class="stat-value" id="maxValue">0.185</div>
+            <div class="stat-note" id="maxNote">At X = 7</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Number of Outcomes</div>
+            <div class="stat-value" id="outcomesValue">21</div>
+            <div class="stat-note">Possible values from 0 to n</div>
+        </div>
+    </section>
+
+    <section class="main-grid">
+        <div class="card">
+            <div class="card-header">
+                <h2>Distribution Parameters</h2>
+                <p>Change the inputs to update the chart automatically.</p>
+            </div>
+
+            <div class="controls">
+                <form id="parameterForm">
+                    <div class="field">
+                        <label for="n">Number of trials (n)</label>
+                        <input
+                            id="n"
+                            type="number"
+                            min="1"
+                            max="200"
+                            step="1"
+                            value="20"
+                            required
+                        >
+                        <span class="hint">Enter an integer from 1 to 200.</span>
+                    </div>
+
+                    <div class="field">
+                        <label for="p">Probability of success (p)</label>
+                        <input
+                            id="p"
+                            type="number"
+                            min="0"
+                            max="1"
+                            step="any"
+                            value="0.35"
+                            required
+                        >
+                        <span class="hint">A value between 0 and 1.</span>
+                    </div>
+
+                    <div class="toggle-row">
+                        <label for="showMean">Show mean reference line</label>
+                        <input id="showMean" type="checkbox" checked>
+                    </div>
+
+                    <button class="primary-btn" type="submit">
+                        Update Graph
+                    </button>
+
+                    <div class="error" id="error" role="alert"></div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <section class="card chart-card">
+                <div class="chart-heading">
+                    <div>
+                        <h2>Probability Mass Function</h2>
+                        <p>Hover over a bar to inspect its exact probability.</p>
+                    </div>
+                    <span class="distribution-tag">BINOMIAL PMF</span>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="pmfChart" aria-label="Binomial probability mass function bar chart"></canvas>
+                </div>
+
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-box"></span>
+                        <span>Probability P(X)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-line"></span>
+                        <span>Mean = np</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-panel">
+                <div class="info-box">
+                    <h3>Probability Formula</h3>
+                    <p class="formula">
+                        P(X = x) = C(n,x) p<sup>x</sup>
+                        (1 − p)<sup>n−x</sup>
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>How to Read This Graph</h3>
+                    <p>
+                        Each bar represents the probability of getting
+                        exactly x successes. The dashed line marks the
+                        expected number of successes, np.
+                    </p>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<footer>
+    Probability Studio · Visual Learning for Discrete Distributions
+</footer>
+
+<script>
+    const nInput = document.getElementById("n");
+    const pInput = document.getElementById("p");
+    const showMeanInput = document.getElementById("showMean");
+    const form = document.getElementById("parameterForm");
+    const errorBox = document.getElementById("error");
+
+    let pmfChart;
+
+    // Stable binomial probability calculation using logarithms.
+    function logFactorial(n) {
+        let result = 0;
+        for (let i = 2; i <= n; i++) {
+            result += Math.log(i);
+        }
+        return result;
+    }
+
+    function binomialProbability(n, p, x) {
+        if (p === 0) return x === 0 ? 1 : 0;
+        if (p === 1) return x === n ? 1 : 0;
+
+        const logCombination =
+            logFactorial(n) -
+            logFactorial(x) -
+            logFactorial(n - x);
+
+        const logP =
+            logCombination +
+            x * Math.log(p) +
+            (n - x) * Math.log1p(-p);
+
+        return Math.exp(logP);
+    }
+
+    // Custom Chart.js plugin to draw the dashed mean reference line.
+    const meanLinePlugin = {
+        id: "meanLine",
+
+        afterDatasetsDraw(chart, args, options) {
+            if (!options || !options.display) return;
+
+            const mean = options.mean;
+            const xScale = chart.scales.x;
+            const yScale = chart.scales.y;
+            const ctx = chart.ctx;
+
+            // The categories represent integer X values.
+            const pixel = xScale.getPixelForValue(mean);
+
+            if (
+                !Number.isFinite(pixel) ||
+                pixel < chart.chartArea.left ||
+                pixel > chart.chartArea.right
+            ) {
+                return;
+            }
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.setLineDash([6, 5]);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#e58c46";
+            ctx.moveTo(pixel, chart.chartArea.top);
+            ctx.lineTo(pixel, chart.chartArea.bottom);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = "#b96725";
+            ctx.font = "600 11px Segoe UI, Arial";
+            ctx.textAlign =
+                pixel > chart.chartArea.right - 85 ? "right" : "left";
+
+            const labelX =
+                pixel > chart.chartArea.right - 85 ? pixel - 7 : pixel + 7;
+
+            ctx.fillText(
+                "Mean = " + mean.toFixed(2),
+                labelX,
+                chart.chartArea.top + 14
+            );
+
+            ctx.restore();
+        }
+    };
+
+    function createChart(n, p) {
+        const labels = [];
+        const probabilities = [];
+
+        for (let x = 0; x <= n; x++) {
+            labels.push(x);
+            probabilities.push(binomialProbability(n, p, x));
+        }
+
+        const mean = n * p;
+        const maxProbability = Math.max(...probabilities);
+        const maxIndex = probabilities.indexOf(maxProbability);
+
+        document.getElementById("meanValue").textContent =
+            mean.toFixed(2);
+
+        document.getElementById("maxValue").textContent =
+            maxProbability.toFixed(4);
+
+        document.getElementById("maxNote").textContent =
+            "At X = " + maxIndex;
+
+        document.getElementById("outcomesValue").textContent =
+            n + 1;
+
+        const ctx = document.getElementById("pmfChart").getContext("2d");
+
+        if (pmfChart) {
+            pmfChart.destroy();
+        }
+
+        pmfChart = new Chart(ctx, {
+            type: "bar",
+
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Probability P(X = x)",
+                    data: probabilities,
+                    backgroundColor: probabilities.map((value, index) =>
+                        index === maxIndex ? "#087f8c" : "#79c9c0"
+                    ),
+                    hoverBackgroundColor: "#075e67",
+                    borderRadius: 4,
+                    borderSkipped: false,
+                    maxBarThickness: 34,
+                    categoryPercentage: 0.88,
+                    barPercentage: 0.9
+                }]
+            },
+
+            plugins: [meanLinePlugin],
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 300
+                },
+
+                interaction: {
+                    mode: "nearest",
+                    intersect: true
+                },
+
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+                        enabled: true,
+                        displayColors: false,
+                        backgroundColor: "#183333",
+                        padding: 13,
+                        cornerRadius: 8,
+
+                        callbacks: {
+                            title: function(items) {
+                                return "X = " + items[0].label;
+                            },
+
+                            label: function(context) {
+                                return "P(X = " + context.label + ") = " +
+                                    context.parsed.y.toFixed(8);
+                            }
+                        }
+                    },
+
+                    meanLine: {
+                        display: showMeanInput.checked,
+                        mean: mean
+                    }
+                },
+
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Number of successes X",
+                            color: "#526967",
+                            font: {
+                                size: 12,
+                                weight: "600"
+                            },
+                            padding: 12
+                        },
+
+                        ticks: {
+                            color: "#718585",
+                            autoSkip: true,
+                            maxTicksLimit: 16,
+                            maxRotation: 0
+                        },
+
+                        grid: {
+                            display: false
+                        },
+
+                        border: {
+                            color: "#dce6e3"
+                        }
+                    },
+
+                    y: {
+                        beginAtZero: true,
+
+                        title: {
+                            display: true,
+                            text: "Probability P(X)",
+                            color: "#526967",
+                            font: {
+                                size: 12,
+                                weight: "600"
+                            },
+                            padding: 12
+                        },
+
+                        ticks: {
+                            color: "#718585",
+                            callback: function(value) {
+                                return Number(value).toFixed(3);
+                            }
+                        },
+
+                        grid: {
+                            color: "#edf2f0"
+                        },
+
+                        border: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updateGraph() {
+        errorBox.style.display = "none";
+
+        const n = Number(nInput.value);
+        const p = Number(pInput.value);
+
+        if (
+            nInput.value.trim() === "" ||
+            !Number.isInteger(n) ||
+            n < 1 ||
+            n > 200
+        ) {
+            errorBox.textContent =
+                "Enter a whole number of trials between 1 and 200.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        if (
+            pInput.value.trim() === "" ||
+            !Number.isFinite(p) ||
+            p < 0 ||
+            p > 1
+        ) {
+            errorBox.textContent =
+                "Enter a success probability between 0 and 1.";
+            errorBox.style.display = "block";
+            return;
+        }
+
+        createChart(n, p);
+    }
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        updateGraph();
+    });
+
+    // Automatically refresh whenever n or p changes.
+    nInput.addEventListener("input", updateGraph);
+    pInput.addEventListener("input", updateGraph);
+
+    showMeanInput.addEventListener("change", function() {
+        if (pmfChart) {
+            pmfChart.options.plugins.meanLine.display =
+                showMeanInput.checked;
+            pmfChart.update();
+        }
+    });
+
+    // Draw the initial distribution.
+    updateGraph();
+</script>
+
+</body>
+</html>

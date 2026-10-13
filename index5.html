@@ -1,0 +1,765 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binomial CDF | Probability Lab</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        :root {
+            --bg: #100d20;
+            --panel: #1b1730;
+            --panel-light: #24203d;
+            --purple: #a78bfa;
+            --pink: #f0abfc;
+            --text: #f5f3ff;
+            --muted: #aaa4c5;
+            --border: #383151;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at 10% 0%, #31245b 0%, transparent 40%),
+                radial-gradient(ellipse at 100% 80%, #291b4a 0%, transparent 35%),
+                var(--bg);
+            color: var(--text);
+        }
+
+        header {
+            min-height: 78px;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(16, 13, 32, 0.75);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 750;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-icon {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #d946ef);
+            font-size: 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 13px;
+            padding: 9px 13px;
+            border-radius: 8px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background: #332752;
+            color: #e9d5ff;
+        }
+
+        .container {
+            max-width: 1120px;
+            padding: 45px 22px;
+            margin: auto;
+        }
+
+        .intro {
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            color: var(--pink);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 45px);
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+            margin-bottom: 13px;
+        }
+
+        h1 span {
+            color: var(--purple);
+        }
+
+        .intro p {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 620px;
+            font-size: 15px;
+        }
+
+        .formula-strip {
+            margin-top: 23px;
+            display: inline-block;
+            padding: 12px 17px;
+            background: rgba(167, 139, 250, 0.09);
+            border: 1px solid #514075;
+            border-radius: 10px;
+            color: #e9d5ff;
+            font-size: 17px;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 0.85fr 1.4fr;
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .panel {
+            background: rgba(27, 23, 48, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 19px;
+            padding: 26px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.16);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .step-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #332752;
+            color: var(--pink);
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        .panel-subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .field {
+            margin-bottom: 21px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 13px;
+            color: #e0dced;
+            font-weight: 650;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 10px;
+            background: #120f23;
+            border: 1px solid #48405f;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.13);
+        }
+
+        .helper {
+            display: block;
+            font-size: 11px;
+            color: #8982a7;
+            margin-top: 7px;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            color: #170e2b;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            background: linear-gradient(100deg, #c4b5fd, #f0abfc);
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.94;
+        }
+
+        .error {
+            display: none;
+            color: #fecaca;
+            background: #451a2a;
+            border: 1px solid #7f2948;
+            border-radius: 9px;
+            margin-top: 16px;
+            padding: 12px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .live-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #86efac;
+            background: #17382e;
+            padding: 7px 10px;
+            border-radius: 20px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .result-card {
+            min-width: 0;
+            border-radius: 15px;
+            padding: 21px 18px;
+        }
+
+        .result-card.cumulative {
+            background: linear-gradient(145deg, #4c308b, #30214e);
+            border: 1px solid #7956b7;
+        }
+
+        .result-card.complement {
+            background: linear-gradient(145deg, #174f58, #18343f);
+            border: 1px solid #32717b;
+        }
+
+        .result-name {
+            color: #e0d7f5;
+            font-size: 12px;
+            font-weight: 650;
+            margin-bottom: 15px;
+        }
+
+        .result-symbol {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .result-value {
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: 800;
+            letter-spacing: -0.7px;
+            overflow-wrap: anywhere;
+        }
+
+        .result-percent {
+            font-size: 12px;
+            color: #d7c9f7;
+            margin-top: 8px;
+        }
+
+        .complement .result-percent {
+            color: #a7e7e8;
+        }
+
+        .visual-section {
+            margin-top: 26px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #151128;
+        }
+
+        .visual-heading {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #e0dced;
+        }
+
+        .bar-track {
+            display: flex;
+            width: 100%;
+            height: 13px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #38314e;
+        }
+
+        .bar-cdf {
+            width: 0%;
+            background: linear-gradient(90deg, #8b5cf6, #d8b4fe);
+            transition: width 0.4s ease;
+        }
+
+        .bar-tail {
+            flex: 1;
+            background: linear-gradient(90deg, #2dd4bf, #5eead4);
+            transition: width 0.4s ease;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 13px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .dot-purple {
+            background: #a78bfa;
+        }
+
+        .dot-teal {
+            background: #5eead4;
+        }
+
+        .meaning {
+            margin-top: 20px;
+            border-left: 3px solid var(--purple);
+            background: #241c3c;
+            padding: 17px 18px;
+            border-radius: 0 11px 11px 0;
+        }
+
+        .meaning h3 {
+            font-size: 13px;
+            color: #e9d5ff;
+            margin-bottom: 7px;
+        }
+
+        .meaning p {
+            color: #c2bad8;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .meaning .tail-note {
+            margin-top: 7px;
+        }
+
+        .footnote {
+            text-align: center;
+            padding-top: 30px;
+            color: #77708f;
+            font-size: 11px;
+        }
+
+        @media (max-width: 780px) {
+            header {
+                padding: 17px 5%;
+            }
+
+            .container {
+                padding: 32px 16px;
+            }
+
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .result-card {
+                padding: 17px 14px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            nav {
+                gap: 2px;
+            }
+
+            nav a {
+                padding: 8px;
+            }
+
+            .panel {
+                padding: 19px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="brand-icon">∑</div>
+        <span>Probability Lab</span>
+    </div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#" class="active">Binomial CDF</a>
+        <a href="#">PMF</a>
+        <a href="#">Poisson</a>
+        <a href="#">Geometric</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="intro">
+        <div class="eyebrow">Interactive Mathematics Lab / Module 02</div>
+        <h1>Binomial <span>Cumulative Probability</span></h1>
+        <p>
+            Discover the probability of achieving up to a given number
+            of successes, and compare it with the probability of exceeding
+            that number.
+        </p>
+
+        <div class="formula-strip">
+            P(X ≤ k) &nbsp; and &nbsp; P(X &gt; k) = 1 − P(X ≤ k)
+        </div>
+    </section>
+
+    <div class="workspace">
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div class="step-icon">01</div>
+                <h2>Distribution Setup</h2>
+            </div>
+
+            <p class="panel-subtitle">
+                Enter the parameters of your binomial experiment.
+                The results will update when you calculate.
+            </p>
+
+            <form id="cdfForm">
+                <div class="field">
+                    <label for="n">Total trials (n)</label>
+                    <input
+                        id="n"
+                        type="number"
+                        min="1"
+                        max="10000"
+                        step="1"
+                        value="20"
+                        required
+                    >
+                    <span class="helper">A positive whole number.</span>
+                </div>
+
+                <div class="field">
+                    <label for="p">Success probability (p)</label>
+                    <input
+                        id="p"
+                        type="number"
+                        min="0"
+                        max="1"
+                        step="any"
+                        value="0.35"
+                        required
+                    >
+                    <span class="helper">Choose a value from 0 to 1.</span>
+                </div>
+
+                <div class="field">
+                    <label for="k">Success threshold (k)</label>
+                    <input
+                        id="k"
+                        type="number"
+                        min="0"
+                        max="20"
+                        step="1"
+                        value="7"
+                        required
+                    >
+                    <span class="helper">Must be an integer from 0 to n.</span>
+                </div>
+
+                <button type="submit" class="calculate-btn">
+                    Calculate CDF ↗
+                </button>
+
+                <div id="error" class="error" role="alert"></div>
+            </form>
+        </section>
+
+        <section class="panel results-panel" aria-live="polite">
+            <div class="result-top">
+                <div class="panel-heading" style="margin-bottom:0">
+                    <div class="step-icon">02</div>
+                    <h2>Probability Results</h2>
+                </div>
+                <span class="live-label">● RESULTS</span>
+            </div>
+
+            <p class="panel-subtitle">
+                For X ~ Binomial(n, p), here are the cumulative probability
+                and its complementary probability.
+            </p>
+
+            <div class="result-grid">
+                <div class="result-card cumulative">
+                    <div class="result-name">Cumulative Probability</div>
+                    <div class="result-symbol" id="cdfSymbol">P(X ≤ 7)</div>
+                    <div class="result-value" id="cdfValue">0.6080</div>
+                    <div class="result-percent" id="cdfPercent">60.80% chance</div>
+                </div>
+
+                <div class="result-card complement">
+                    <div class="result-name">Probability Above k</div>
+                    <div class="result-symbol" id="tailSymbol">P(X &gt; 7)</div>
+                    <div class="result-value" id="tailValue">0.3920</div>
+                    <div class="result-percent" id="tailPercent">39.20% chance</div>
+                </div>
+            </div>
+
+            <div class="visual-section">
+                <div class="visual-heading">
+                    <span>Probability Distribution Split</span>
+                    <span>100% total</span>
+                </div>
+
+                <div class="bar-track" aria-label="Cumulative and complementary probabilities">
+                    <div class="bar-cdf" id="cdfBar"></div>
+                    <div class="bar-tail" id="tailBar"></div>
+                </div>
+
+                <div class="legend">
+                    <span>
+                        <i class="dot dot-purple"></i>
+                        P(X ≤ k)
+                    </span>
+                    <span>
+                        <i class="dot dot-teal"></i>
+                        P(X &gt; k)
+                    </span>
+                </div>
+            </div>
+
+            <div class="meaning">
+                <h3>Understanding the Result</h3>
+                <p id="meaningText">
+                    P(X ≤ k) means the probability of getting k or fewer successes.
+                </p>
+                <p class="tail-note" id="tailMeaning">
+                    P(X > k) means the probability of getting more than k successes.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <div class="footnote">
+        DISCRETE PROBABILITY DISTRIBUTIONS · LEARN BY CALCULATING
+    </div>
+
+</main>
+
+<script>
+    const form = document.getElementById("cdfForm");
+    const nInput = document.getElementById("n");
+    const pInput = document.getElementById("p");
+    const kInput = document.getElementById("k");
+    const errorBox = document.getElementById("error");
+
+    // Calculate the binomial probability P(X = i).
+    function binomialPMF(n, p, i) {
+        if (p === 0) return i === 0 ? 1 : 0;
+        if (p === 1) return i === n ? 1 : 0;
+
+        // Use logarithms to improve numerical stability.
+        let logCombination = 0;
+
+        for (let j = 1; j <= i; j++) {
+            logCombination += Math.log(n - j + 1) - Math.log(j);
+        }
+
+        const logProbability =
+            logCombination +
+            i * Math.log(p) +
+            (n - i) * Math.log1p(-p);
+
+        return Math.exp(logProbability);
+    }
+
+    // Calculate P(X <= k) by summing P(X = i) for i = 0,...,k.
+    function binomialCDF(n, p, k) {
+        if (k >= n) return 1;
+        if (p === 0) return 1;
+        if (p === 1) return 0;
+
+        let total = 0;
+
+        for (let i = 0; i <= k; i++) {
+            total += binomialPMF(n, p, i);
+        }
+
+        return Math.max(0, Math.min(1, total));
+    }
+
+    function formatProbability(value) {
+        if (value === 0) return "0.000000";
+        if (value < 0.000001) return value.toExponential(4);
+        return value.toFixed(6);
+    }
+
+    function showError(message) {
+        errorBox.textContent = message;
+        errorBox.style.display = "block";
+    }
+
+    function calculate() {
+        errorBox.style.display = "none";
+
+        const n = Number(nInput.value);
+        const p = Number(pInput.value);
+        const k = Number(kInput.value);
+
+        if (
+            nInput.value.trim() === "" ||
+            !Number.isInteger(n) ||
+            n < 1 ||
+            n > 10000
+        ) {
+            showError("Enter a positive whole number of trials between 1 and 10,000.");
+            return;
+        }
+
+        if (
+            pInput.value.trim() === "" ||
+            !Number.isFinite(p) ||
+            p < 0 ||
+            p > 1
+        ) {
+            showError("The success probability p must be between 0 and 1.");
+            return;
+        }
+
+        if (
+            kInput.value.trim() === "" ||
+            !Number.isInteger(k) ||
+            k < 0 ||
+            k > n
+        ) {
+            showError("Invalid k. Enter an integer satisfying 0 ≤ k ≤ n.");
+            return;
+        }
+
+        const cdf = binomialCDF(n, p, k);
+        // Clamp the complement to avoid tiny floating-point negatives.
+        const tail = Math.max(0, Math.min(1, 1 - cdf));
+
+        document.getElementById("cdfSymbol").textContent = `P(X ≤ ${k})`;
+        document.getElementById("tailSymbol").textContent = `P(X > ${k})`;
+
+        document.getElementById("cdfValue").textContent =
+            formatProbability(cdf);
+        document.getElementById("tailValue").textContent =
+            formatProbability(tail);
+
+        document.getElementById("cdfPercent").textContent =
+            `${(cdf * 100).toFixed(4)}% chance`;
+        document.getElementById("tailPercent").textContent =
+            `${(tail * 100).toFixed(4)}% chance`;
+
+        document.getElementById("cdfBar").style.width =
+            `${cdf * 100}%`;
+        document.getElementById("tailBar").style.width =
+            `${tail * 100}%`;
+
+        document.getElementById("meaningText").textContent =
+            "P(X ≤ k) means the probability of getting k or fewer successes.";
+
+        document.getElementById("tailMeaning").textContent =
+            "P(X > k) means the probability of getting more than k successes.";
+    }
+
+    // Keep k's HTML maximum aligned with n for convenience.
+    nInput.addEventListener("input", function () {
+        const n = Number(nInput.value);
+
+        if (Number.isInteger(n) && n >= 1 && n <= 10000) {
+            kInput.max = String(n);
+        } else {
+            kInput.removeAttribute("max");
+        }
+    });
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        calculate();
+    });
+
+    calculate();
+</script>
+
+</body>
+</html>
