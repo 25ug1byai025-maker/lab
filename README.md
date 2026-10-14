@@ -1,3 +1,4 @@
+#Satistical lab
 # Discrete Probability Distributions — AIML Laboratory
 
 An interactive web-based learning application developed as part of an undergraduate Artificial Intelligence and Machine Learning (AIML) laboratory. The project helps students understand discrete probability distributions through mathematical calculations, interactive inputs, and graphical visualization.
