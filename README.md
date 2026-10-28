@@ -1,195 +1,129 @@
 # PROBABILITY AND STATISTICS FOR MACHINE LEARNING - 1BMATAI301
-# Discrete Probability Distributions
+Discrete Probability Distributions Lab
+AIML Laboratory Project · Lab Program 2 · Semester III
 
-**An Interactive Web Application for AIML Laboratory Learning**
+An interactive, browser-based learning application for exploring discrete probability distributions through mathematical calculations, probability tables, and visualizations. The project is built with HTML, CSS, and JavaScript and is designed to help students connect probability theory with practical laboratory exercises.
+Overview
+The application demonstrates three commonly used discrete probability distributions:
+- Binomial distribution — models the number of successes in a fixed number of independent trials.
+- Poisson distribution — models the number of events occurring in a fixed interval when the average event rate is known.
+- Geometric distribution — models the number of independent trials required to obtain the first success.
+The interface includes parameter inputs, probability calculations, statistical measures, graphs, and guided laboratory exercises. The pages are intended for educational use and experimentation.
+Features
+Binomial distribution
+- Enter the number of trials \(n\), success probability \(p\), and target count \(k\).
+- Calculate the probability mass function (PMF), cumulative distribution function (CDF), and upper-tail probability.
+- View the mean, variance, standard deviation, second moment, and skewness.
+- Visualize the probability mass function and the mean.
+Poisson distribution
+- Set the average event rate \(\lambda\) and the event count \(k\).
+- Calculate PMF, CDF, and upper-tail probability.
+- View statistical measures, including mean, variance, standard deviation, second moment, and skewness.
+- Compare Poisson distributions for different values of \(\lambda\).
+Geometric distribution
+- Set the success probability \(p\) and the trial number \(k\).
+- Calculate the probability of the first success occurring on a selected trial.
+- View cumulative and upper-tail probabilities, along with statistical measures.
+- Compare probabilities for the first, second, and third attempts.
+Guided laboratory exercises
+- Work through quality-control examples involving product defects.
+- Explore alert-monitoring examples using Binomial and Poisson models.
+- Compare distributions and interpret how changing parameters affects the graph.
+- Load the example parameter values directly into the relevant calculator.
+Mathematical models
+1. Binomial distribution
+For \(X\sim\operatorname{Binomial}(n,p)\):
+\[
+P(X=k)=\binom{n}{k}p^k(1-p)^{n-k}
+\]
+- Mean: \(E[X]=np\)
+- Variance: \(\operatorname{Var}(X)=np(1-p)\)
+- Standard deviation: \(\sqrt{np(1-p)}\)
+2. Poisson distribution
+For \(X\sim\operatorname{Poisson}(\lambda)\):
+\[
+P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}
+\]
+- Mean: \(E[X]=\lambda\)
+- Variance: \(\operatorname{Var}(X)=\lambda\)
+3. Geometric distribution
+This project uses the convention \(X=1,2,3,\ldots\), where \(X\) is the trial number on which the first success occurs:
+\[
+P(X=k)=(1-p)^{k-1}p
+\]
+- Mean: \(E[X]=\frac{1}{p}\)
+- Variance: \(\operatorname{Var}(X)=\frac{1-p}{p^2}\)
+Technology stack
+Technology	Purpose
+HTML5	Structures the application and its content
+CSS3	Provides the layout, responsive styling, and visual theme
+JavaScript	Performs probability calculations, validates inputs, updates results, and draws graphs
+HTML Canvas	Renders probability distribution graphs
+Jupyter Notebook	Supports separate laboratory exercises stored in notebook files
 
-A simple, interactive web application developed as part of an undergraduate Artificial Intelligence and Machine Learning (AIML) laboratory. The application helps students explore discrete probability distributions through mathematical calculations, user inputs, and graphical visualizations.
 
-## 📌 Project Overview
+The web application runs in a modern browser. The standalone HTML application does not require a Node.js build step.
+Repository structure
+The repository currently contains these top-level files:
+File	Purpose
+index.html	Main web application for exploring the discrete probability distributions.
+Lab_Pgm_1_Exercise_Qs.ipynb	Jupyter Notebook containing laboratory programming exercises and questions.
+Untitled1.ipynb	Additional Jupyter Notebook; review its contents and rename it to a meaningful title if it is part of the final submission.
+README.md	Project overview, features, mathematical models, setup instructions, and documentation.
 
-Probability distributions are an important part of statistics, data analysis, and machine learning. This project demonstrates how probability concepts can be implemented using web technologies.
 
-Students can modify distribution parameters, calculate probabilities, observe graphical patterns, and understand how different input values affect the results.
+Note: This file list reflects the repository's visible top-level files. If you add separate HTML pages or screenshots later, update this section to include their exact filenames.
 
-## 🎯 Objectives
-
-- Understand the fundamentals of discrete probability distributions.
-- Implement probability formulas using JavaScript.
-- Calculate statistical measures and probability values.
-- Visualize probability distributions using interactive graphs.
-- Connect mathematical concepts with practical programming applications.
-
-## ✨ Features
-
-### 1. Binomial Distribution
-
-- Input the number of trials (\(n\)) and probability of success (\(p\)).
-- Calculate mean, variance, standard deviation, second moment, and skewness.
-- Calculate exact probability using the Probability Mass Function (PMF).
-- Calculate cumulative probability using the Cumulative Distribution Function (CDF).
-- Display complementary probability, \(P(X>k)\).
-- Visualize the probability distribution using a bar chart.
-- View probability values using interactive graph tooltips.
-
-### 2. Poisson Distribution
-
-- Set the average event rate (\(\lambda\)).
-- Calculate the mean and variance.
-- Calculate exact and cumulative probabilities.
-- Visualize the Poisson probability mass function.
-- Compare distributions for \(\lambda=2\), \(\lambda=6\), and \(\lambda=10\).
-
-### 3. Geometric Distribution
-
-The Geometric Distribution section is included in the navigation as a placeholder for future development.
-
-## 🛠️ Technologies Used
-
-| Technology | Purpose |
-|---|---|
-| HTML5 | Structures the web application |
-| CSS3 | Provides styling and responsive layouts |
-| JavaScript | Performs probability calculations and handles interactions |
-| HTML Canvas API | Draws probability distribution graphs |
-| Jupyter Notebook | Supports laboratory exercises and programming practice |
-| GitHub | Stores and manages the project source code |
-
-## 📐 Mathematical Concepts
-
-### Binomial Distribution
-
-For a random variable \(X\sim\operatorname{Binomial}(n,p)\):
-
-| Measure | Formula |
-|---|---|
-| Mean | \(E[X]=np\) |
-| Variance | \(\operatorname{Var}(X)=np(1-p)\) |
-| Standard deviation | \(\sqrt{np(1-p)}\) |
-| Second moment | \(E[X^2]=\operatorname{Var}(X)+(E[X])^2\) |
-| Skewness | \(\frac{1-2p}{\sqrt{np(1-p)}}\) |
-| PMF | \(P(X=k)=\binom{n}{k}p^k(1-p)^{n-k}\) |
-
-### Poisson Distribution
-
-For a random variable \(X\sim\operatorname{Poisson}(\lambda)\):
-
-| Measure | Formula |
-|---|---|
-| Mean | \(E[X]=\lambda\) |
-| Variance | \(\operatorname{Var}(X)=\lambda\) |
-| PMF | \(P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}\) |
-| CDF | \(P(X\leq k)=\sum_{i=0}^{k}P(X=i)\) |
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- A modern web browser, such as Google Chrome, Microsoft Edge, or Firefox.
-- Visual Studio Code (recommended).
-- Live Server extension (optional).
-
-### Run the Application Locally
-
-**Step 1: Clone the repository**
-
-```bash
+Getting started
+Option 1: Run directly in a browser
+1. Open the repository.
+2. Select index.html.
+3. Download the file, or download the repository using Code → Download ZIP.
+4. If you downloaded a ZIP, extract it.
+5. Open index.html in a modern browser such as Chrome or Edge.
+Option 2: Run using Visual Studio Code
+1. Clone the repository or download and extract it.
+2. Open the project folder in Visual Studio Code.
+3. Open index.html.
+4. Run it in a browser. If you use the Live Server extension, right-click index.html and select Open with Live Server.
+No package installation or build command is required for the standalone HTML application. An internet connection may be needed if any page uses externally hosted resources.
+Clone the repository
 git clone https://github.com/25ug1byai025-maker/lab.git
-```
-
-**Step 2: Open the project folder**
-
-```bash
 cd lab
-```
-
-**Step 3: Launch the application**
-
-Open the folder in Visual Studio Code and open `index.html`.
-
-You can either:
-
-- Open `index.html` directly in your web browser, or
-- Right-click the file and select **Open with Live Server**.
-
-**Step 4: Explore the application**
-
-Use the navigation menu to open the available sections. Change the input parameters, calculate probabilities, and observe the graphs.
-
-No backend server or database is required to run the standalone web application.
-
-## 🧪 Laboratory Exercises
-
-### Exercise 1 — Interactive Binomial Distribution
-
-Set the following parameters:
-
-- Number of trials: \(n=15\)
-- Probability of success: \(p=0.6\)
-
-Determine:
-
-1. Mean and variance.
-2. Probability of exactly nine successes, \(P(X=9)\).
-3. Probability of at most ten successes, \(P(X\leq10)\).
-4. The region with the highest probability in the PMF graph.
-5. A brief inference based on the visualization.
-
-### Exercise 2 — Interactive Poisson Distribution
-
-Consider an AI-based monitoring system with an average event rate of \(\lambda=6\).
-
-Determine:
-
-1. Mean and variance.
-2. Probability of exactly eight events, \(P(X=8)\).
-3. Probability of at most five events, \(P(X\leq5)\).
-4. Compare the graphs for \(\lambda=2\), \(6\), and \(10\).
-5. Explain how increasing the average event rate affects the distribution.
-
-## 📂 Project Structure
-
-```text
-lab/
-├── index.html
-├── Lab_Pgm_1_Exercise_Qs.ipynb
-├── Untitled1.ipynb
-└── README.md
-```
-
-| File | Description |
-|---|---|
-| `index.html` | Main web application containing the interface, probability calculators, and visualizations |
-| `Lab_Pgm_1_Exercise_Qs.ipynb` | Jupyter Notebook for laboratory programming exercises and questions |
-| `Untitled1.ipynb` | Additional Jupyter Notebook for programming practice |
-| `README.md` | Project documentation and setup instructions |
-
-## 📚 Learning Outcomes
-
-Through this project, students gain practical experience in:
-
-- Applying mathematical probability formulas.
-- Implementing calculations using JavaScript.
-- Designing interactive web interfaces with HTML and CSS.
-- Representing mathematical data through graphs.
-- Interpreting Binomial and Poisson distributions.
-- Developing and documenting a small academic software project.
-
-## 🔮 Future Enhancements
-
-- Implement the complete Geometric Distribution module.
-- Add step-by-step explanations for probability calculations.
-- Include additional discrete probability distributions.
-- Improve the collection of worked examples and laboratory exercises.
-- Extend graph interaction and visualization options.
-
-## 👩‍💻 Project Details
-
-- **Project:** Discrete Probability Distributions
-- **Domain:** Artificial Intelligence and Machine Learning
-- **Project Type:** Undergraduate Laboratory Project
-- **Application:** Web-Based Educational Tool
-- **Repository:** [25ug1byai025-maker/lab](https://github.com/25ug1byai025-maker/lab)
-
----
-
-*Developed for academic learning and practical exploration of discrete probability distributions.*
+Then open index.html in your browser.
+Suggested laboratory workflow
+1. Open the Binomial module and enter the required values of \(n\), \(p\), and \(k\).
+2. Record the mean, variance, and requested probability.
+3. Examine the PMF graph and observe the effect of changing the success probability.
+4. Open the Poisson module, enter the specified \(\lambda\), and calculate the requested event probabilities.
+5. Compare Poisson graphs for different average rates.
+6. Open the Geometric module and examine the probability that the first success occurs on the first, second, and third attempts.
+7. Record the numerical results, graph observations, and an inference relevant to the quality-control or alert-monitoring example.
+Use the exact values specified by your laboratory worksheet for each experiment; the examples above describe the workflow rather than a single set of required answers.
+Learning outcomes
+By working with this project, students can practise:
+- Translating probability formulas into JavaScript functions.
+- Validating numeric inputs and handling invalid parameter values.
+- Calculating PMF, CDF, and complementary probabilities.
+- Computing summary statistics for discrete distributions.
+- Representing probability distributions graphically.
+- Interpreting how parameters affect the distribution of outcomes.
+Limitations and assumptions
+- The application is an educational calculator, not a production monitoring or quality-control system.
+- The results depend on the parameters entered by the user and the assumptions of each probability model.
+- Binomial calculations assume a fixed number of independent trials with a constant success probability.
+- Poisson calculations assume a specified average event rate for the interval being modelled.
+- Geometric calculations assume independent trials with a constant probability of success.
+- The application does not verify real-world monitoring data unless such data are explicitly supplied and processed.
+Future improvements
+- Add screenshots of the application and its distribution graphs.
+- Give all notebook files descriptive names and document their contents.
+- Add worked examples with expected results for each distribution.
+- Provide downloadable results for laboratory records.
+- Improve accessibility and add more guided interpretations of the graphs.
+Academic context
+- Project: Discrete Probability Distributions
+- Domain: Artificial Intelligence and Machine Learning / Probability and Statistics
+- Purpose: Undergraduate laboratory learning and experimentation
+- Implementation: Browser-based educational application
+Developed as an academic laboratory project to support the practical study of discrete probability distributions.
