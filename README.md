@@ -179,9 +179,9 @@ The repository contains the following files:
 ```text
 lab/
 │
-├── index1.html
+├── index1.html(Binomial,Posson,Geometric distributions)
 │
-├── probability_distributions_interactive_app.html
+├── index2.html(Normal and exponential distributions)
 │
 ├── Lab_Pgm_1_Exercise_Qs.ipynb
 │
@@ -199,7 +199,7 @@ lab/
 | File | Description |
 |---|---|
 | `index1.html` | Interactive application for Binomial, Poisson, and Geometric distributions. |
-| `probability_distributions_interactive_app.html` | Application for Normal and Exponential distributions and manufacturing quality control. |
+| `index2.html` | Application for Normal and Exponential distributions and manufacturing quality control. |
 | `Lab_Pgm_1_Exercise_Qs.ipynb` | Jupyter Notebook for laboratory exercise questions. |
 | `Untitled0.ipynb` | Additional Jupyter Notebook included in the repository. |
 | `Untitled1.ipynb` | Additional Jupyter Notebook included in the repository. |
