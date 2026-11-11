@@ -1,330 +1,2335 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Normal Distribution Problem Solver</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Continuous Probability Distributions</title>
+
 <style>
-:root{--navy:#102d4d;--navy2:#0a223d;--teal:#168b8d;--teal-light:#dff1ef;--orange:#efa52c;--red:#d85d64;--ink:#26394c;--muted:#748397;--line:#e4eaf0;--bg:#f3f6f9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
-header{height:60px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 24px;gap:13px;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #102d4d25}
-.brand{font-weight:700;letter-spacing:.3px}.right{margin-left:auto;color:#dce7f0;font-size:13px}
-.layout{display:flex;min-height:calc(100vh - 60px)}aside{width:220px;background:var(--navy2);padding:22px 13px;flex-shrink:0;color:#d4e1ed}
-.logo{font-size:11px;text-transform:uppercase;letter-spacing:1.3px;color:#8ea8c1;padding:0 11px 20px}
-nav a{display:flex;gap:12px;align-items:center;color:#cad8e6;text-decoration:none;padding:13px 12px;margin:4px 0;border-radius:7px;font-size:13px}
-nav a:hover,nav a.active{background:#24496d;color:white}
-main{width:100%;max-width:1500px;margin:auto;padding:25px}
-h1{font-size:24px;margin:0 0 6px;color:#193956}h2{font-size:17px;margin:0 0 13px;color:#1d3c59}h3{font-size:14px;margin:14px 0 8px}
-.sub,.muted{color:var(--muted);font-size:13px;line-height:1.55}.sub{margin-bottom:18px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{background:#e6edf3;color:#34516b}.tab.active{background:var(--teal);color:white}
-button{border:0;border-radius:6px;padding:10px 15px;font-weight:650;cursor:pointer}.primary{background:var(--teal);color:#fff}.secondary{background:#eaf0f5;color:#40576d}.tab{padding:10px 15px}
-.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px;box-shadow:0 2px 9px #1939560a}
-.grid{display:grid;grid-template-columns:minmax(300px,.82fr) minmax(400px,1.45fr);gap:15px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}
-.metric-label{font-size:12px;color:var(--muted);margin-bottom:7px}.metric{font-size:20px;font-weight:750;color:var(--teal)}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-label{display:block;font-size:12px;color:#5f7184;margin-bottom:6px}
-input,select{width:100%;border:1px solid #d9e1e9;border-radius:6px;padding:10px;font-size:14px;color:var(--ink);background:white}
-input:focus,select:focus{outline:2px solid #168b8d30;border-color:var(--teal)}
-.unit{font-size:11px;color:#8995a3;margin-top:4px}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
-.error{display:none;margin-top:12px;background:#fff0ef;color:#a92d2d;border:1px solid #ffd1ce;padding:10px;border-radius:6px;font-size:13px}
-.formula{font-family:Cambria,serif;background:#f5f8fa;border-radius:6px;padding:11px;margin-top:12px;font-size:15px;line-height:1.7;color:#3e5368}
-.resultgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
-.result{padding:13px}.result .metric{font-size:18px}.result .metric-label{min-height:28px;line-height:1.4}
-.chart{min-height:390px}.chart svg{width:100%;height:auto;display:block}
-.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#66798b;margin-top:7px}
-.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
-.steps{margin-top:15px}.steps table{border-collapse:collapse;width:100%;font-size:13px}.steps th{text-align:left;background:#f0f4f7;color:#53677b}.steps th,.steps td{padding:10px;border-bottom:1px solid #e9eef2;vertical-align:top}.steps td:last-child{font-weight:700;color:#168b8d;white-space:nowrap}
-.interpret{margin-top:14px;padding:14px 16px;border-left:4px solid var(--teal);background:#eaf5f4;border-radius:5px;font-size:13px;line-height:1.6}
-.hidden{display:none!important}.note{font-size:12px;color:#78889a;line-height:1.5;margin-top:10px}
-footer{text-align:center;color:#98a4af;font-size:11px;padding:22px}
-@media(max-width:950px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:650px){aside{width:55px;padding:12px 5px}.logo{display:none}nav a{font-size:0;justify-content:center;padding:14px 2px}nav a span{font-size:17px}main{padding:16px 11px}.fields{grid-template-columns:1fr 1fr}.resultgrid{grid-template-columns:1fr 1fr}.right{font-size:11px}}
-</style></head>
+:root{
+--navy:#102d4d;
+--navy2:#0a223d;
+--teal:#168b8d;
+--teal-light:#dff1ef;
+--orange:#efa52c;
+--red:#d85d64;
+--ink:#26394c;
+--muted:#748397;
+--line:#e4eaf0;
+--bg:#f3f6f9
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:var(--bg);
+font-family:Inter,Segoe UI,Arial,sans-serif;
+color:var(--ink)
+}
+
+header{
+height:60px;
+background:var(--navy);
+color:#fff;
+display:flex;
+align-items:center;
+padding:0 24px;
+gap:13px;
+position:sticky;
+top:0;
+z-index:5;
+box-shadow:0 2px 8px #102d4d25
+}
+
+.brand{font-weight:700;letter-spacing:.3px}
+.right{margin-left:auto;color:#dce7f0;font-size:13px}
+
+.layout{
+display:flex;
+min-height:calc(100vh - 60px)
+}
+
+aside{
+width:220px;
+background:var(--navy2);
+padding:22px 13px;
+flex-shrink:0;
+color:#d4e1ed
+}
+
+.logo{
+font-size:11px;
+text-transform:uppercase;
+letter-spacing:1.3px;
+color:#8ea8c1;
+padding:0 11px 20px
+}
+
+nav a{
+display:flex;
+gap:12px;
+align-items:center;
+color:#cad8e6;
+text-decoration:none;
+padding:13px 12px;
+margin:4px 0;
+border-radius:7px;
+font-size:13px
+}
+
+nav a:hover,nav a.active{
+background:#24496d;
+color:white
+}
+
+main{
+width:100%;
+max-width:1500px;
+margin:auto;
+padding:25px
+}
+
+h1{
+font-size:24px;
+margin:0 0 6px;
+color:#193956
+}
+
+h2{
+font-size:17px;
+margin:0 0 13px;
+color:#1d3c59
+}
+
+h3{
+font-size:14px;
+margin:14px 0 8px
+}
+
+.sub,.muted{
+color:var(--muted);
+font-size:13px;
+line-height:1.55
+}
+
+.sub{margin-bottom:18px}
+
+.tabs{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin:18px 0
+}
+
+.tab{
+background:#e6edf3;
+color:#34516b;
+padding:10px 15px
+}
+
+.tab.active{
+background:var(--teal);
+color:white
+}
+
+button{
+border:0;
+border-radius:6px;
+padding:10px 15px;
+font-weight:650;
+cursor:pointer
+}
+
+.primary{background:var(--teal);color:#fff}
+.secondary{background:#eaf0f5;color:#40576d}
+
+.card{
+background:#fff;
+border:1px solid var(--line);
+border-radius:10px;
+padding:17px;
+box-shadow:0 2px 9px #1939560a
+}
+
+.grid{
+display:grid;
+grid-template-columns:minmax(300px,.82fr) minmax(400px,1.45fr);
+gap:15px
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-bottom:15px
+}
+
+.metric-label{
+font-size:12px;
+color:var(--muted);
+margin-bottom:7px
+}
+
+.metric{
+font-size:20px;
+font-weight:750;
+color:var(--teal)
+}
+
+.fields{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+
+label{
+display:block;
+font-size:12px;
+color:#5f7184;
+margin-bottom:6px
+}
+
+input,select{
+width:100%;
+border:1px solid #d9e1e9;
+border-radius:6px;
+padding:10px;
+font-size:14px;
+color:var(--ink);
+background:white
+}
+
+input:focus,select:focus{
+outline:2px solid #168b8d30;
+border-color:var(--teal)
+}
+
+.unit{
+font-size:11px;
+color:#8995a3;
+margin-top:4px
+}
+
+.actions{
+display:flex;
+gap:9px;
+flex-wrap:wrap;
+margin-top:15px
+}
+
+.error{
+display:none;
+margin-top:12px;
+background:#fff0ef;
+color:#a92d2d;
+border:1px solid #ffd1ce;
+padding:10px;
+border-radius:6px;
+font-size:13px
+}
+
+.formula{
+font-family:Cambria,serif;
+background:#f5f8fa;
+border-radius:6px;
+padding:11px;
+margin-top:12px;
+font-size:15px;
+line-height:1.7;
+color:#3e5368
+}
+
+.resultgrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:15px
+}
+
+.result{padding:13px}
+.result .metric{font-size:18px}
+.result .metric-label{
+min-height:28px;
+line-height:1.4
+}
+
+.chart{min-height:390px}
+.chart svg{
+width:100%;
+height:auto;
+display:block
+}
+
+.legend{
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+font-size:12px;
+color:#66798b;
+margin-top:7px
+}
+
+.dot{
+display:inline-block;
+width:9px;
+height:9px;
+border-radius:50%;
+margin-right:5px
+}
+
+.steps{margin-top:15px}
+
+.steps table{
+border-collapse:collapse;
+width:100%;
+font-size:13px
+}
+
+.steps th{
+text-align:left;
+background:#f0f4f7;
+color:#53677b
+}
+
+.steps th,.steps td{
+padding:10px;
+border-bottom:1px solid #e9eef2;
+vertical-align:top
+}
+
+.steps td:last-child{
+font-weight:700;
+color:#168b8d;
+white-space:nowrap
+}
+
+.interpret{
+margin-top:14px;
+padding:14px 16px;
+border-left:4px solid var(--teal);
+background:#eaf5f4;
+border-radius:5px;
+font-size:13px;
+line-height:1.6
+}
+
+.hidden{display:none!important}
+
+.note{
+font-size:12px;
+color:#78889a;
+line-height:1.5;
+margin-top:10px
+}
+
+footer{
+text-align:center;
+color:#98a4af;
+font-size:11px;
+padding:22px
+}
+
+@media(max-width:950px){
+.grid{grid-template-columns:1fr}
+.cards{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:650px){
+aside{width:55px;padding:12px 5px}
+.logo{display:none}
+nav a{
+font-size:0;
+justify-content:center;
+padding:14px 2px
+}
+nav a span{font-size:17px}
+main{padding:16px 11px}
+.fields{grid-template-columns:1fr 1fr}
+.resultgrid{grid-template-columns:1fr 1fr}
+.right{font-size:11px}
+}
+</style>
+</head>
+
 <body>
-<header><span style="font-size:20px">▦</span><div class="brand">NORMAL DISTRIBUTION ANALYTICS</div><div class="right">Probability Solver　 ◉　 ?　 ●</div></header>
-<div class="layout"><aside><div class="logo">Analytics workspace</div><nav>
+
+<header>
+<span style="font-size:20px">▦</span>
+<div class="brand">NORMAL DISTRIBUTION ANALYTICS</div>
+<div class="right">Probability Solver　 ◉　 ?　 ●</div>
+</header>
+
+<div class="layout">
+
+<aside>
+<div class="logo">Analytics workspace</div>
+
+<nav>
 <a href="#home" class="active"><span>▦</span>Dashboard</a>
 <a href="#solver"><span>∩</span>Normal Probability Solver</a>
 <a href="#exponential"><span>⌁</span>Exponential Distribution</a>
 <a href="#quality"><span>⚙</span>Manufacturing Quality Control</a>
+<a href="#clt"><span>∑</span>Central Limit Theorem</a>
 <a href="#method"><span>∑</span>Formula & Z-table method</a>
-</nav></aside>
+</nav>
+</aside>
+
 <main id="home">
+
 <h1>Continuous Probability Distributions</h1>
-<div class="sub">Interactive normal distribution calculator for engineering mathematics and manufacturing applications.</div>
-<div class="tabs"><button class="tab active" id="solverTab">Normal probability problem</button><button class="tab" id="expTab">Exponential distribution</button><button class="tab" id="qualityTab">Shaft quality control</button></div>
+
+<div class="sub">
+Interactive probability calculator for engineering mathematics and manufacturing applications.
+</div>
+
+<div class="tabs">
+<button class="tab active" id="solverTab">Normal probability problem</button>
+<button class="tab" id="expTab">Exponential distribution</button>
+<button class="tab" id="qualityTab">Shaft quality control</button>
+<button class="tab" id="cltTab">Central Limit Theorem</button>
+</div>
+
+<!-- ================================= -->
+<!-- MODULE 1: NORMAL DISTRIBUTION -->
+<!-- ================================= -->
 
 <section id="solver">
+
 <div class="grid">
+
 <div class="card">
+
 <h2>Enter the given values</h2>
-<p class="muted">For a normal random variable X, enter its mean and standard deviation, then choose the probability asked in your question.</p>
+
+<p class="muted">
+For a normal random variable X, enter its mean and standard deviation, then choose the probability asked in your question.
+</p>
+
 <div class="fields">
-<div><label for="mu">Mean (μ)</label><input id="mu" type="number" step="any" value="30"></div>
-<div><label for="sigma">Standard deviation (σ)</label><input id="sigma" type="number" min="0.0000001" step="any" value="5"></div>
-<div style="grid-column:1/-1"><label for="event">What probability do you need?</label><select id="event"><option value="between">P(a ≤ X ≤ b) — Between two values</option><option value="less">P(X ≤ a) — Less than a value</option><option value="greater">P(X ≥ a) — Greater than a value</option><option value="outside">P(X ≤ a or X ≥ b) — Outside two values</option></select></div>
-<div id="aWrap"><label for="a">Value a</label><input id="a" type="number" step="any" value="26"></div>
-<div id="bWrap"><label for="b">Value b</label><input id="b" type="number" step="any" value="40"></div>
+
+<div>
+<label for="mu">Mean (μ)</label>
+<input id="mu" type="number" step="any" value="30">
 </div>
-<div class="actions"><button class="primary" id="solve">Solve probability</button><button class="secondary" id="example">Load notebook example</button><button class="secondary" id="clear">Reset</button></div>
+
+<div>
+<label for="sigma">Standard deviation (σ)</label>
+<input id="sigma" type="number" min="0.0000001" step="any" value="5">
+</div>
+
+<div style="grid-column:1/-1">
+<label for="event">What probability do you need?</label>
+<select id="event">
+<option value="between">P(a ≤ X ≤ b) — Between two values</option>
+<option value="less">P(X ≤ a) — Less than a value</option>
+<option value="greater">P(X ≥ a) — Greater than a value</option>
+<option value="outside">P(X ≤ a or X ≥ b) — Outside two values</option>
+</select>
+</div>
+
+<div id="aWrap">
+<label for="a">Value a</label>
+<input id="a" type="number" step="any" value="26">
+</div>
+
+<div id="bWrap">
+<label for="b">Value b</label>
+<input id="b" type="number" step="any" value="40">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" id="solve">Solve probability</button>
+<button class="secondary" id="example">Load notebook example</button>
+<button class="secondary" id="clear">Reset</button>
+</div>
+
 <div class="error" id="solverError"></div>
-<div class="formula">Standardization: &nbsp; Z = (X − μ) / σ<br>Table area: &nbsp; A(z) = area between Z = 0 and Z = z (for z ≥ 0)</div>
-<div class="note">The result uses the normal CDF. The working also converts the result into the area-from-zero Z-table method used in many engineering mathematics notebooks.</div>
+
+<div class="formula">
+Standardization: &nbsp; Z = (X − μ) / σ<br>
+Table area: &nbsp; A(z) = area between Z = 0 and Z = z (for z ≥ 0)
 </div>
+
+<div class="note">
+The result uses the normal CDF. The working also converts the result into the area-from-zero Z-table method used in many engineering mathematics notebooks.
+</div>
+
+</div>
+
 <div class="card chart">
-<h2>Normal curve and probability region</h2><p class="muted">The coloured area represents the event selected on the left.</p>
-<svg id="solverChart" viewBox="0 0 760 390" role="img" aria-label="Normal distribution curve with probability area shaded"></svg>
-<div class="legend"><span><i class="dot" style="background:#168b8d"></i>Required probability area</span><span><i class="dot" style="background:#183653"></i>Mean</span><span><i class="dot" style="background:#efa52c"></i>Boundary a</span><span><i class="dot" style="background:#d85d64"></i>Boundary b</span></div>
-</div></div>
-<div class="cards" style="margin-top:15px">
-<div class="card"><div class="metric-label">Z-score at a</div><div class="metric" id="zaOut">−0.8000</div></div>
-<div class="card"><div class="metric-label">Z-score at b</div><div class="metric" id="zbOut">2.0000</div></div>
-<div class="card"><div class="metric-label">Required probability</div><div class="metric" id="probOut">0.7654</div></div>
-<div class="card"><div class="metric-label">Percentage</div><div class="metric" id="percentOut">76.54%</div></div>
+
+<h2>Normal curve and probability region</h2>
+
+<p class="muted">
+The coloured area represents the event selected on the left.
+</p>
+
+<svg id="solverChart" viewBox="0 0 760 390" role="img" aria-label="Normal distribution curve"></svg>
+
+<div class="legend">
+<span><i class="dot" style="background:#168b8d"></i>Required probability area</span>
+<span><i class="dot" style="background:#183653"></i>Mean</span>
+<span><i class="dot" style="background:#efa52c"></i>Boundary a</span>
+<span><i class="dot" style="background:#d85d64"></i>Boundary b</span>
 </div>
-<div class="card steps" id="method"><h2>Step-by-step solution (Z-table method)</h2>
-<p class="muted">The table area A(z) is measured from the mean (Z = 0) to the required Z-score. The application displays the Z-score, table area, CDF and final probability.</p>
-<div style="overflow-x:auto"><table><thead><tr><th>Step</th><th>Working / substitution</th><th>Answer</th></tr></thead><tbody id="solverSteps"></tbody></table></div>
-<div class="interpret" id="solverInterpret">Select Solve probability to display the full solution.</div></div>
+
+</div>
+</div>
+
+<div class="cards" style="margin-top:15px">
+
+<div class="card">
+<div class="metric-label">Z-score at a</div>
+<div class="metric" id="zaOut">−0.8000</div>
+</div>
+
+<div class="card">
+<div class="metric-label">Z-score at b</div>
+<div class="metric" id="zbOut">2.0000</div>
+</div>
+
+<div class="card">
+<div class="metric-label">Required probability</div>
+<div class="metric" id="probOut">0.7654</div>
+</div>
+
+<div class="card">
+<div class="metric-label">Percentage</div>
+<div class="metric" id="percentOut">76.54%</div>
+</div>
+
+</div>
+
+<div class="card steps" id="method">
+
+<h2>Step-by-step solution (Z-table method)</h2>
+
+<p class="muted">
+The table area A(z) is measured from the mean (Z = 0) to the required Z-score.
+</p>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Working / substitution</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody id="solverSteps"></tbody>
+</table>
+</div>
+
+<div class="interpret" id="solverInterpret">
+Select Solve probability to display the full solution.
+</div>
+
+</div>
 </section>
 
-<section id="quality" class="hidden">
-<h1 style="font-size:21px">Manufacturing Quality Control — Shaft Diameter</h1>
-<p class="muted">Calculate the probability that manufactured shafts meet the lower and upper specification limits.</p>
-<div class="grid">
-<div class="card"><h2>Process input parameters</h2><div class="fields">
-<div><label for="target">Target shaft diameter (mm)</label><input id="target" type="number" step="any" value="10"></div>
-<div><label for="qmu">Mean diameter μ (mm)</label><input id="qmu" type="number" step="any" value="10"></div>
-<div><label for="variance">Variance σ² (mm²)</label><input id="variance" type="number" min="0.0000001" step="any" value="0.0025"></div>
-<div><label for="lower">Lower limit (mm)</label><input id="lower" type="number" step="any" value="9.90"></div>
-<div><label for="upper">Upper limit (mm)</label><input id="upper" type="number" step="any" value="10.10"></div>
-</div><div class="actions"><button class="primary" id="qsolve">Calculate quality</button><button class="secondary" id="qreset">Reset values</button></div><div class="error" id="qError"></div>
-<div class="formula">σ = √σ²<br> P(L ≤ X ≤ U) = Φ(zU) − Φ(zL)</div></div>
-<div class="card chart"><h2>Shaft diameter distribution</h2><svg id="qualityChart" viewBox="0 0 760 390" role="img" aria-label="Shaft diameter normal distribution chart"></svg><div class="legend"><span><i class="dot" style="background:#efa52c"></i>Below lower limit</span><span><i class="dot" style="background:#168b8d"></i>Acceptable</span><span><i class="dot" style="background:#d85d64"></i>Above upper limit</span></div></div></div>
-<div class="resultgrid">
-<div class="card result"><div class="metric-label">Standard deviation</div><div class="metric" id="qSigma">—</div></div>
-<div class="card result"><div class="metric-label">Probability within limits</div><div class="metric" id="qWithin">—</div></div>
-<div class="card result"><div class="metric-label">Probability below lower limit</div><div class="metric" id="qBelow">—</div></div>
-<div class="card result"><div class="metric-label">Probability above upper limit</div><div class="metric" id="qAbove">—</div></div>
-<div class="card result"><div class="metric-label">Expected defective percentage</div><div class="metric" id="qDefect">—</div></div>
-<div class="card result"><div class="metric-label">Density at target</div><div class="metric" id="qDensity">—</div></div>
-</div>
-<div class="card steps"><h2>Quality-control probability working</h2><div style="overflow-x:auto"><table><thead><tr><th>Step</th><th>Working / substitution</th><th>Answer</th></tr></thead><tbody id="qSteps"></tbody></table></div><div class="interpret" id="qInterpret"></div></div>
-</section>
+
+<!-- ================================= -->
+<!-- MODULE 2: EXPONENTIAL DISTRIBUTION -->
+<!-- ================================= -->
 
 <section id="exponential" class="hidden">
-<h1 style="font-size:21px">Exponential Distribution — Cloud Request Inter-arrival Time</h1>
-<p class="muted">Model the waiting time between consecutive cloud requests under a constant-rate Poisson arrival process. Inter-arrival time is the time between arrivals; it is not server response time.</p>
-<div class="interpret" style="margin:0 0 15px"><strong>Model assumption:</strong> Requests arrive according to a Poisson process with a constant arrival rate λ. Under this assumption, the time between consecutive arrivals follows an exponential distribution.</div>
-<div class="grid">
-<div class="card">
-<h2>Input parameters</h2>
-<p class="muted">Illustrative starting rate: 12 requests per minute. You can change all values.</p>
-<div class="fields">
-<div><label for="lambdaRate">Arrival rate (λ)</label><input id="lambdaRate" type="number" min="0.000001" step="any" value="12"><div class="unit">requests per minute</div></div>
-<div><label for="timeT">Time threshold (t)</label><input id="timeT" type="number" min="0" step="any" value="5"><div class="unit">seconds</div></div>
-<div><label for="timeT1">Conditional time (t₁)</label><input id="timeT1" type="number" min="0" step="any" value="2"><div class="unit">seconds</div></div>
-<div><label for="timeT2">Conditional time (t₂)</label><input id="timeT2" type="number" min="0" step="any" value="5"><div class="unit">seconds; must be ≥ t₁</div></div>
+
+<h1 style="font-size:21px">
+Exponential Distribution — Cloud Request Inter-arrival Time
+</h1>
+
+<p class="muted">
+Model the waiting time between consecutive cloud requests under a constant-rate Poisson arrival process. Inter-arrival time is the time between arrivals; it is not server response time.
+</p>
+
+<div class="interpret" style="margin:0 0 15px">
+<strong>Model assumption:</strong> Requests arrive according to a Poisson process with a constant arrival rate λ. Under this assumption, the time between consecutive arrivals follows an exponential distribution.
 </div>
-<div class="actions"><button class="primary" id="expSolve">Calculate probabilities</button><button class="secondary" id="expReset">Reset values</button></div>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Input parameters</h2>
+
+<p class="muted">
+Illustrative starting rate: 12 requests per minute. You can change all values.
+</p>
+
+<div class="fields">
+
+<div>
+<label for="lambdaRate">Arrival rate (λ)</label>
+<input id="lambdaRate" type="number" min="0.000001" step="any" value="12">
+<div class="unit">requests per minute</div>
+</div>
+
+<div>
+<label for="timeT">Time threshold (t)</label>
+<input id="timeT" type="number" min="0" step="any" value="5">
+<div class="unit">seconds</div>
+</div>
+
+<div>
+<label for="timeT1">Conditional time (t₁)</label>
+<input id="timeT1" type="number" min="0" step="any" value="2">
+<div class="unit">seconds</div>
+</div>
+
+<div>
+<label for="timeT2">Conditional time (t₂)</label>
+<input id="timeT2" type="number" min="0" step="any" value="5">
+<div class="unit">seconds; must be ≥ t₁</div>
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" id="expSolve">Calculate probabilities</button>
+<button class="secondary" id="expReset">Reset values</button>
+</div>
+
 <div class="error" id="expError"></div>
+
 <div class="formula">
 λ per second = λ per minute / 60<br>
 Mean = 1 / λ &nbsp; | &nbsp; Variance = 1 / λ²<br>
 P(T ≤ t) = 1 − e<sup>−λt</sup><br>
 P(T &gt; t) = e<sup>−λt</sup>
 </div>
-<div class="note">For calculations in seconds, λ is first converted from requests/minute to requests/second. Mean is shown in seconds and variance in seconds².</div>
+
+<div class="note">
+For calculations in seconds, λ is first converted from requests/minute to requests/second. Mean is shown in seconds and variance in seconds².
 </div>
+
+</div>
+
 <div class="card chart">
+
 <h2>Exponential probability density curve</h2>
-<p class="muted">The teal area shows P(T ≤ t). The orange tail shows P(T &gt; t).</p>
-<svg id="expChart" viewBox="0 0 760 390" role="img" aria-label="Exponential probability density with shaded probability before and after time threshold"></svg>
-<div class="legend"><span><i class="dot" style="background:#168b8d"></i>Waiting time ≤ t</span><span><i class="dot" style="background:#efa52c"></i>Waiting time &gt; t</span><span><i class="dot" style="background:#183653"></i>Threshold t</span></div>
+
+<p class="muted">
+The teal area shows P(T ≤ t). The orange tail shows P(T > t).
+</p>
+
+<svg id="expChart" viewBox="0 0 760 390" role="img" aria-label="Exponential probability density"></svg>
+
+<div class="legend">
+<span><i class="dot" style="background:#168b8d"></i>Waiting time ≤ t</span>
+<span><i class="dot" style="background:#efa52c"></i>Waiting time &gt; t</span>
+<span><i class="dot" style="background:#183653"></i>Threshold t</span>
+</div>
+
 </div>
 </div>
+
 <div class="resultgrid">
-<div class="card result"><div class="metric-label">Rate per second</div><div class="metric" id="expRateSec">—</div></div>
-<div class="card result"><div class="metric-label">Mean inter-arrival time</div><div class="metric" id="expMean">—</div></div>
-<div class="card result"><div class="metric-label">Variance</div><div class="metric" id="expVariance">—</div></div>
-<div class="card result"><div class="metric-label">P(T ≤ t)</div><div class="metric" id="expCDF">—</div></div>
-<div class="card result"><div class="metric-label">P(T &gt; t)</div><div class="metric" id="expSurvival">—</div></div>
-<div class="card result"><div class="metric-label">P(T &gt; t₂ | T &gt; t₁)</div><div class="metric" id="expConditional">—</div></div>
+
+<div class="card result">
+<div class="metric-label">Rate per second</div>
+<div class="metric" id="expRateSec">—</div>
 </div>
+
+<div class="card result">
+<div class="metric-label">Mean inter-arrival time</div>
+<div class="metric" id="expMean">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">Variance</div>
+<div class="metric" id="expVariance">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">P(T ≤ t)</div>
+<div class="metric" id="expCDF">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">P(T &gt; t)</div>
+<div class="metric" id="expSurvival">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">P(T &gt; t₂ | T &gt; t₁)</div>
+<div class="metric" id="expConditional">—</div>
+</div>
+
+</div>
+
 <div class="card steps">
+
 <h2>Step-by-step exponential probability calculations</h2>
-<p class="muted">The calculations below show the unit conversion, substitution into the exponential formulas, and the final probabilities.</p>
-<div style="overflow-x:auto"><table><thead><tr><th>Step</th><th>Working / substitution</th><th>Answer</th></tr></thead><tbody id="expSteps"></tbody></table></div>
-<div class="interpret" id="expInterpret"></div>
+
+<p class="muted">
+The calculations below show the unit conversion, substitution into the exponential formulas, and the final probabilities.
+</p>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Working / substitution</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody id="expSteps"></tbody>
+</table>
 </div>
+
+<div class="interpret" id="expInterpret"></div>
+
+</div>
+
 <div class="card" style="margin-top:15px">
+
 <h2>Memoryless property</h2>
-<p style="font-size:14px;line-height:1.65;margin:0">The exponential distribution is memoryless. This means that if no request has arrived during the first t₁ seconds, the probability of waiting at least another (t₂ − t₁) seconds is the same as the probability of waiting that long from the start. The time already waited does not change the remaining-wait distribution.</p>
-<div class="formula">P(T &gt; t₂ | T &gt; t₁) = P(T &gt; t₂ − t₁) = e<sup>−λ(t₂−t₁)</sup>, for t₂ ≥ t₁</div>
+
+<p style="font-size:14px;line-height:1.65;margin:0">
+The exponential distribution is memoryless. This means that if no request has arrived during the first t₁ seconds, the probability of waiting at least another (t₂ − t₁) seconds is the same as the probability of waiting that long from the start.
+</p>
+
+<div class="formula">
+P(T &gt; t₂ | T &gt; t₁) = P(T &gt; t₂ − t₁) = e<sup>−λ(t₂−t₁)</sup>
+</div>
+
 </div>
 </section>
 
-<footer>Educational calculator • Probability distributions • Runs locally in your browser</footer>
-</main></div>
+
+<!-- ================================= -->
+<!-- MODULE 3: MANUFACTURING QUALITY -->
+<!-- ================================= -->
+
+<section id="quality" class="hidden">
+
+<h1 style="font-size:21px">
+Manufacturing Quality Control — Shaft Diameter
+</h1>
+
+<p class="muted">
+Calculate the probability that manufactured shafts meet the lower and upper specification limits.
+</p>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Process input parameters</h2>
+
+<div class="fields">
+
+<div>
+<label for="target">Target shaft diameter (mm)</label>
+<input id="target" type="number" step="any" value="10">
+</div>
+
+<div>
+<label for="qmu">Mean diameter μ (mm)</label>
+<input id="qmu" type="number" step="any" value="10">
+</div>
+
+<div>
+<label for="variance">Variance σ² (mm²)</label>
+<input id="variance" type="number" min="0.0000001" step="any" value="0.0025">
+</div>
+
+<div>
+<label for="lower">Lower limit (mm)</label>
+<input id="lower" type="number" step="any" value="9.90">
+</div>
+
+<div>
+<label for="upper">Upper limit (mm)</label>
+<input id="upper" type="number" step="any" value="10.10">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" id="qsolve">Calculate quality</button>
+<button class="secondary" id="qreset">Reset values</button>
+</div>
+
+<div class="error" id="qError"></div>
+
+<div class="formula">
+σ = √σ²<br>
+P(L ≤ X ≤ U) = Φ(zU) − Φ(zL)
+</div>
+
+</div>
+
+<div class="card chart">
+
+<h2>Shaft diameter distribution</h2>
+
+<svg id="qualityChart" viewBox="0 0 760 390" role="img" aria-label="Shaft diameter normal distribution chart"></svg>
+
+<div class="legend">
+<span><i class="dot" style="background:#efa52c"></i>Below lower limit</span>
+<span><i class="dot" style="background:#168b8d"></i>Acceptable</span>
+<span><i class="dot" style="background:#d85d64"></i>Above upper limit</span>
+</div>
+
+</div>
+</div>
+
+<div class="resultgrid">
+
+<div class="card result">
+<div class="metric-label">Standard deviation</div>
+<div class="metric" id="qSigma">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">Probability within limits</div>
+<div class="metric" id="qWithin">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">Probability below lower limit</div>
+<div class="metric" id="qBelow">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">Probability above upper limit</div>
+<div class="metric" id="qAbove">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">Expected defective percentage</div>
+<div class="metric" id="qDefect">—</div>
+</div>
+
+<div class="card result">
+<div class="metric-label">Density at target</div>
+<div class="metric" id="qDensity">—</div>
+</div>
+
+</div>
+
+<div class="card steps">
+
+<h2>Quality-control probability working</h2>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Working / substitution</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody id="qSteps"></tbody>
+</table>
+</div>
+
+<div class="interpret" id="qInterpret"></div>
+
+</div>
+</section>
+
+
+<!-- ================================= -->
+<!-- MODULE 4: CENTRAL LIMIT THEOREM -->
+<!-- ================================= -->
+
+<section id="clt" class="hidden">
+
+<h1 style="font-size:21px">
+Central Limit Theorem — Warehouse Processing Time
+</h1>
+
+<p class="muted">
+Calculate the probability of average warehouse order-processing time using the Central Limit Theorem and the sampling distribution of the sample mean.
+</p>
+
+<div class="interpret" style="margin:0 0 15px">
+<strong>Warehouse application:</strong> A warehouse processes customer orders. Individual processing times have a population mean μ and standard deviation σ. A random sample of n orders is selected. The Central Limit Theorem helps estimate the probability that the sample average processing time falls within a specified range.
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Warehouse input parameters</h2>
+
+<p class="muted">
+Enter the population statistics, sample size and required probability condition.
+</p>
+
+<div class="fields">
+
+<div>
+<label for="cltMu">Population mean (μ)</label>
+<input id="cltMu" type="number" step="any" value="30">
+<div class="unit">Minutes</div>
+</div>
+
+<div>
+<label for="cltSigma">Population standard deviation (σ)</label>
+<input id="cltSigma" type="number" min="0.000001" step="any" value="8">
+<div class="unit">Minutes</div>
+</div>
+
+<div>
+<label for="cltN">Sample size (n)</label>
+<input id="cltN" type="number" min="1" step="1" value="36">
+<div class="unit">Number of orders sampled</div>
+</div>
+
+<div>
+<label for="cltEvent">Required probability</label>
+<select id="cltEvent">
+<option value="between">P(a ≤ X̄ ≤ b) — Between two values</option>
+<option value="less">P(X̄ ≤ a) — Less than a value</option>
+<option value="greater">P(X̄ ≥ a) — Greater than a value</option>
+</select>
+</div>
+
+<div id="cltAWrap">
+<label for="cltA">Average time (a)</label>
+<input id="cltA" type="number" step="any" value="28">
+</div>
+
+<div id="cltBWrap">
+<label for="cltB">Average time (b)</label>
+<input id="cltB" type="number" step="any" value="32">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" id="cltSolve">Calculate probability</button>
+<button class="secondary" id="cltExample">Load example</button>
+<button class="secondary" id="cltReset">Reset values</button>
+</div>
+
+<div class="error" id="cltError"></div>
+
+<div class="formula">
+Standard error = σ / √n<br>
+Z = (X̄ − μ) / (σ / √n)<br>
+Mean of X̄ = μ<br>
+Variance of X̄ = σ²/n
+</div>
+
+<div class="note">
+For sufficiently large random samples, the Central Limit Theorem allows the sample mean to be approximated by a normal distribution. For small samples, the population distribution should be normal or the approximation should be used cautiously.
+</div>
+
+</div>
+
+<div class="card chart">
+
+<h2>Sampling distribution of average processing time</h2>
+
+<p class="muted">
+The shaded area represents the selected probability for the sample mean.
+</p>
+
+<svg id="cltChart" viewBox="0 0 760 390" role="img" aria-label="Central Limit Theorem sampling distribution curve"></svg>
+
+<div class="legend">
+<span><i class="dot" style="background:#168b8d"></i>Required probability area</span>
+<span><i class="dot" style="background:#183653"></i>Mean</span>
+<span><i class="dot" style="background:#efa52c"></i>Boundary a</span>
+<span><i class="dot" style="background:#d85d64"></i>Boundary b</span>
+</div>
+
+</div>
+</div>
+
+<div class="cards" style="margin-top:15px">
+
+<div class="card">
+<div class="metric-label">Standard error</div>
+<div class="metric" id="cltSE">—</div>
+</div>
+
+<div class="card">
+<div class="metric-label">Z-score at a</div>
+<div class="metric" id="cltZA">—</div>
+</div>
+
+<div class="card">
+<div class="metric-label">Z-score at b</div>
+<div class="metric" id="cltZB">—</div>
+</div>
+
+<div class="card">
+<div class="metric-label">Required probability</div>
+<div class="metric" id="cltProbability">—</div>
+</div>
+
+</div>
+
+<div class="card steps">
+
+<h2>Step-by-step CLT solution</h2>
+
+<p class="muted">
+The solution displays the population values, standard error, Z-scores, Z-table areas and final probability.
+</p>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Working / substitution</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody id="cltSteps"></tbody>
+</table>
+</div>
+
+<div class="interpret" id="cltInterpret">
+Select Calculate probability to display the complete solution.
+</div>
+
+</div>
+
+<div class="card" style="margin-top:15px">
+
+<h2>Understanding the warehouse application</h2>
+
+<p style="font-size:14px;line-height:1.7;margin:0">
+The Central Limit Theorem helps warehouse managers estimate the probability of average order-processing times for samples of orders. Even when individual processing times are not normally distributed, the sampling distribution of the sample mean becomes approximately normal under suitable conditions as the sample size increases.
+</p>
+
+<div class="formula">
+Population mean = μ<br>
+Population standard deviation = σ<br>
+Sample mean = X̄<br>
+Standard error = σ / √n<br>
+Sampling variance = σ² / n
+</div>
+
+</div>
+
+</section>
+
+
+<footer>
+Educational calculator • Probability distributions • Runs locally in your browser
+</footer>
+
+</main>
+</div>
+
+
+<!-- ================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================= -->
+
 <script>
+
 const $=id=>document.getElementById(id);
-function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);return s*y}
-function Phi(z){return .5*(1+erf(z/Math.SQRT2))}
-function A(z){return Math.abs(Phi(Math.abs(z))-.5)}
-function pdf(x,mu,s){return Math.exp(-.5*((x-mu)/s)**2)/(s*Math.sqrt(2*Math.PI))}
-function fmt(x,n=4){return Number(x).toFixed(n)}
-function percent(p){return (p*100).toFixed(4)+'%'}
-function row(a,b,c){return `<tr><td>${a}</td><td>${b}</td><td>${c}</td></tr>`}
-function showError(id,msg){$(id).textContent=msg;$(id).style.display='block'}
-function hideError(id){$(id).style.display='none'}
+
+function erf(x){
+const s=x<0?-1:1;
+x=Math.abs(x);
+const t=1/(1+.3275911*x);
+const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);
+return s*y;
+}
+
+function Phi(z){
+return .5*(1+erf(z/Math.SQRT2));
+}
+
+function A(z){
+return Math.abs(Phi(Math.abs(z))-.5);
+}
+
+function pdf(x,mu,s){
+return Math.exp(-.5*((x-mu)/s)**2)/(s*Math.sqrt(2*Math.PI));
+}
+
+function fmt(x,n=4){
+return Number(x).toFixed(n);
+}
+
+function percent(p){
+return (p*100).toFixed(4)+'%';
+}
+
+function row(a,b,c){
+return `<tr><td>${a}</td><td>${b}</td><td>${c}</td></tr>`;
+}
+
+function showError(id,msg){
+$(id).textContent=msg;
+$(id).style.display='block';
+}
+
+function hideError(id){
+$(id).style.display='none';
+}
+
+
+/* =================================
+   COMMON NORMAL DISTRIBUTION CHART
+================================= */
+
 function drawNormal(svgId,mu,sigma,regions,labels={}){
- const svg=$(svgId),W=760,H=390,L=62,R=24,T=22,B=55,base=H-B,min=mu-4.2*sigma,max=mu+4.2*sigma;
- const X=x=>L+(x-min)/(max-min)*(W-L-R),peak=pdf(mu,mu,sigma),Y=y=>base-y/peak*(H-T-B-10);
- let grid='';for(let i=0;i<=4;i++){let y=base-(H-T-B-10)*i/4;grid+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#e8edf2" stroke-dasharray="4 5"/><text x="${L-10}" y="${y+4}" text-anchor="end" font-size="11" fill="#82909c">${(i/4).toFixed(2)}</text>`}
- const path=arr=>arr.map((p,i)=>(i?'L':'M')+p[0].toFixed(2)+','+p[1].toFixed(2)).join(' ');
- function area(a,b,color,opacity=.34){a=Math.max(min,a);b=Math.min(max,b);if(b<=a)return '';let p=[[X(a),base]];for(let i=0;i<=100;i++){let x=a+(b-a)*i/100;p.push([X(x),Y(pdf(x,mu,sigma))])}p.push([X(b),base]);return `<path d="${path(p)} Z" fill="${color}" opacity="${opacity}"/>`}
- let curve=[];for(let i=0;i<=280;i++){let x=min+(max-min)*i/280;curve.push([X(x),Y(pdf(x,mu,sigma))])}
- let marks=labels.values||[];let markSvg=marks.map(m=>`<line x1="${X(m.x)}" y1="${Y(pdf(m.x,mu,sigma))}" x2="${X(m.x)}" y2="${base}" stroke="${m.color||'#64748b'}" stroke-dasharray="5 4" stroke-width="2"/><text x="${X(m.x)}" y="${base+19}" text-anchor="middle" font-size="11" fill="${m.color||'#64748b'}">${m.label}</text>`).join('');
- svg.innerHTML=grid+regions.map(r=>area(r[0],r[1],r[2],r[3])).join('')+`<path d="${path(curve)}" fill="none" stroke="#168b8d" stroke-width="3"/>`+
- `<line x1="${X(mu)}" y1="${Y(peak)}" x2="${X(mu)}" y2="${base}" stroke="#183653" stroke-width="2" stroke-dasharray="4 4"/>`+
- `<text x="${X(mu)}" y="${Math.max(16,Y(peak)-10)}" text-anchor="middle" font-size="12" font-weight="bold" fill="#183653">Mean μ</text>${markSvg}<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#8b99a7"/><text x="${(L+W-R)/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#64748b">Random variable X</text><text x="17" y="${H/2}" transform="rotate(-90 17 ${H/2})" text-anchor="middle" font-size="12" fill="#64748b">Probability density</text>`;
+
+const svg=$(svgId);
+
+const W=760,H=390,L=62,R=24,T=22,B=55;
+const base=H-B;
+const min=mu-4.2*sigma;
+const max=mu+4.2*sigma;
+
+const X=x=>L+(x-min)/(max-min)*(W-L-R);
+
+const peak=pdf(mu,mu,sigma);
+
+const Y=y=>base-y/peak*(H-T-B-10);
+
+let grid='';
+
+for(let i=0;i<=4;i++){
+
+let y=base-(H-T-B-10)*i/4;
+
+grid+=`
+<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"
+stroke="#e8edf2" stroke-dasharray="4 5"/>
+
+<text x="${L-10}" y="${y+4}"
+text-anchor="end" font-size="11" fill="#82909c">
+${(i/4).toFixed(2)}
+</text>`;
 }
-function updateEventFields(){let e=$('event').value; $('bWrap').classList.toggle('hidden',e==='less'||e==='greater');$('aWrap').querySelector('label').textContent=e==='greater'?'Boundary a (X ≥ a)':e==='less'?'Boundary a (X ≤ a)':'Lower boundary a';}
+
+const path=arr=>arr.map((p,i)=>
+(i?'L':'M')+p[0].toFixed(2)+','+p[1].toFixed(2)
+).join(' ');
+
+function area(a,b,color,opacity=.34){
+
+a=Math.max(min,a);
+b=Math.min(max,b);
+
+if(b<=a)return '';
+
+let p=[[X(a),base]];
+
+for(let i=0;i<=100;i++){
+
+let x=a+(b-a)*i/100;
+
+p.push([X(x),Y(pdf(x,mu,sigma))]);
+
+}
+
+p.push([X(b),base]);
+
+return `<path d="${path(p)} Z" fill="${color}" opacity="${opacity}"/>`;
+
+}
+
+let curve=[];
+
+for(let i=0;i<=280;i++){
+
+let x=min+(max-min)*i/280;
+
+curve.push([X(x),Y(pdf(x,mu,sigma))]);
+
+}
+
+let marks=labels.values||[];
+
+let markSvg=marks.map(m=>`
+
+<line x1="${X(m.x)}"
+y1="${Y(pdf(m.x,mu,sigma))}"
+x2="${X(m.x)}"
+y2="${base}"
+stroke="${m.color||'#64748b'}"
+stroke-dasharray="5 4"
+stroke-width="2"/>
+
+<text x="${X(m.x)}"
+y="${base+19}"
+text-anchor="middle"
+font-size="11"
+fill="${m.color||'#64748b'}">
+${m.label}
+</text>
+
+`).join('');
+
+svg.innerHTML=
+grid+
+regions.map(r=>area(r[0],r[1],r[2],r[3])).join('')+
+`<path d="${path(curve)}" fill="none" stroke="#168b8d" stroke-width="3"/>`+
+`
+<line x1="${X(mu)}"
+y1="${Y(peak)}"
+x2="${X(mu)}"
+y2="${base}"
+stroke="#183653"
+stroke-width="2"
+stroke-dasharray="4 4"/>
+
+<text x="${X(mu)}"
+y="${Math.max(16,Y(peak)-10)}"
+text-anchor="middle"
+font-size="12"
+font-weight="bold"
+fill="#183653">Mean μ</text>
+
+${markSvg}
+
+<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#8b99a7"/>
+
+<text x="${(L+W-R)/2}" y="${H-8}"
+text-anchor="middle" font-size="12" fill="#64748b">
+Random variable
+</text>
+
+<text x="17" y="${H/2}"
+transform="rotate(-90 17 ${H/2})"
+text-anchor="middle" font-size="12" fill="#64748b">
+Probability density
+</text>
+`;
+
+}
+
+
+/* =================================
+   MODULE 1: NORMAL DISTRIBUTION
+================================= */
+
+function updateEventFields(){
+
+let e=$('event').value;
+
+$('bWrap').classList.toggle(
+'hidden',
+e==='less'||e==='greater'
+);
+
+$('aWrap').querySelector('label').textContent=
+e==='greater'?'Boundary a (X ≥ a)':
+e==='less'?'Boundary a (X ≤ a)':
+'Lower boundary a';
+
+}
+
 $('event').addEventListener('change',updateEventFields);
+
+
 function solve(){
- try{
-  let mu=Number($('mu').value),s=Number($('sigma').value),a=Number($('a').value),b=Number($('b').value),e=$('event').value;
-  if(![mu,s,a].every(Number.isFinite)||s<=0)throw Error('Enter valid values. Standard deviation must be greater than zero.');
-  if(e!=='less'&&e!=='greater'&&(!Number.isFinite(b)||a>=b))throw Error('For a two-boundary question, a must be strictly less than b.');
-  hideError('solverError');
-  let za=(a-mu)/s,zb=(b-mu)/s,pa=Phi(za),pb=Phi(zb),p=0,regions=[],steps=[];
-  const table=(z)=>`A(${fmt(Math.abs(z),4)}) = ${fmt(A(z),6)}`;
-  steps.push(row('1. Given values',`X ~ N(μ, σ²), μ = ${mu}, σ = ${s}; variance = σ² = ${fmt(s*s,6)}`,`σ = ${s}`));
-  steps.push(row('2. Standardize boundary a',`zₐ = (a − μ) / σ = (${a} − ${mu}) / ${s}`,fmt(za,4)));
-  if(e==='between'||e==='outside'){
-   steps.push(row('3. Standardize boundary b',`zᵦ = (b − μ) / σ = (${b} − ${mu}) / ${s}`,fmt(zb,4)));
-  }
-  if(e==='between'){
-   p=pb-pa;regions=[[a,b,'#168b8d',.35]];
-   steps.push(row('3. Z-table area at a',table(za),fmt(A(za),6)));
-   steps.push(row('4. Z-table area at b',table(zb),fmt(A(zb),6)));
-   let work;
-   if(za<0&&zb>0)work=`P(a ≤ X ≤ b) = A(|zₐ|) + A(zᵦ) = ${fmt(A(za),6)} + ${fmt(A(zb),6)}`;
-   else if(za>=0)work=`P = A(zᵦ) − A(zₐ) = ${fmt(A(zb),6)} − ${fmt(A(za),6)}`;
-   else work=`P = A(|zₐ|) − A(|zᵦ|) = ${fmt(A(za),6)} − ${fmt(A(zb),6)}`;
-   steps.push(row('5. Required probability',work,fmt(p,6)+' = '+percent(p)));
-   steps.push(row('CDF verification',`Φ(zᵦ) − Φ(zₐ) = ${fmt(pb,6)} − ${fmt(pa,6)}`,fmt(p,6)));
-  }else if(e==='less'){
-   p=pa;regions=[[mu-4.2*s,a,'#168b8d',.35]];
-   let work=za<0?`P(X ≤ a) = 0.5 − A(|zₐ|) = 0.5 − ${fmt(A(za),6)}`:`P(X ≤ a) = 0.5 + A(zₐ) = 0.5 + ${fmt(A(za),6)}`;
-   steps.push(row('3. Z-table area',table(za),fmt(A(za),6)));
-   steps.push(row('4. Required probability',work,fmt(p,6)+' = '+percent(p)));
-   steps.push(row('CDF verification',`Φ(${fmt(za,4)})`,fmt(pa,6)));
-  }else if(e==='greater'){
-   p=1-pa;regions=[[a,mu+4.2*s,'#168b8d',.35]];
-   let work=za>=0?`P(X ≥ a) = 0.5 − A(zₐ) = 0.5 − ${fmt(A(za),6)}`:`P(X ≥ a) = 0.5 + A(|zₐ|) = 0.5 + ${fmt(A(za),6)}`;
-   steps.push(row('3. Z-table area',table(za),fmt(A(za),6)));
-   steps.push(row('4. Required probability',work,fmt(p,6)+' = '+percent(p)));
-   steps.push(row('CDF verification',`1 − Φ(${fmt(za,4)})`,fmt(p,6)));
-  }else{
-   p=pa+(1-pb);regions=[[mu-4.2*s,a,'#168b8d',.35], [b,mu+4.2*s,'#168b8d',.35]];
-   steps.push(row('4. Z-table areas',`${table(za)}; ${table(zb)}`,`${fmt(A(za),6)}; ${fmt(A(zb),6)}`));
-   steps.push(row('5. Required probability',`P(outside) = Φ(zₐ) + [1 − Φ(zᵦ)]`,fmt(p,6)+' = '+percent(p)));
-  }
-  $('zaOut').textContent=fmt(za,4);$('zbOut').textContent=(e==='less'||e==='greater')?'—':fmt(zb,4);$('probOut').textContent=fmt(p,6);$('percentOut').textContent=percent(p);
-  $('solverSteps').innerHTML=steps.join('');
-  $('solverInterpret').innerHTML=`<strong>Answer:</strong> The probability of the selected event is <strong>${fmt(p,6)}</strong>, or <strong>${percent(p)}</strong>. This means approximately ${percent(p)} of observations from this normal distribution are expected to satisfy the selected condition.`;
-  let marks=[{x:a,label:'a',color:'#efa52c'}];if(e!=='less'&&e!=='greater')marks.push({x:b,label:'b',color:'#d85d64'});
-  drawNormal('solverChart',mu,s,regions,{values:marks});
- }catch(err){showError('solverError',err.message)}
+
+try{
+
+let mu=Number($('mu').value);
+let s=Number($('sigma').value);
+let a=Number($('a').value);
+let b=Number($('b').value);
+let e=$('event').value;
+
+if(![mu,s,a].every(Number.isFinite)||s<=0)
+throw Error('Enter valid values. Standard deviation must be greater than zero.');
+
+if(e!=='less'&&e!=='greater'&&
+(!Number.isFinite(b)||a>=b))
+throw Error('For a two-boundary question, a must be strictly less than b.');
+
+hideError('solverError');
+
+let za=(a-mu)/s;
+let zb=(b-mu)/s;
+
+let pa=Phi(za);
+let pb=Phi(zb);
+
+let p=0;
+let regions=[];
+let steps=[];
+
+const table=z=>`A(${fmt(Math.abs(z),4)}) = ${fmt(A(z),6)}`;
+
+steps.push(row(
+'1. Given values',
+`X ~ N(μ, σ²), μ = ${mu}, σ = ${s}; variance = σ² = ${fmt(s*s,6)}`,
+`σ = ${s}`
+));
+
+steps.push(row(
+'2. Standardize boundary a',
+`zₐ = (a − μ) / σ = (${a} − ${mu}) / ${s}`,
+fmt(za,4)
+));
+
+if(e==='between'||e==='outside'){
+
+steps.push(row(
+'3. Standardize boundary b',
+`zᵦ = (b − μ) / σ = (${b} − ${mu}) / ${s}`,
+fmt(zb,4)
+));
+
 }
+
+if(e==='between'){
+
+p=pb-pa;
+
+regions=[[a,b,'#168b8d',.35]];
+
+steps.push(row('3. Z-table area at a',table(za),fmt(A(za),6)));
+
+steps.push(row('4. Z-table area at b',table(zb),fmt(A(zb),6)));
+
+let work;
+
+if(za<0&&zb>0){
+
+work=`P(a ≤ X ≤ b) = A(|zₐ|) + A(zᵦ) = ${fmt(A(za),6)} + ${fmt(A(zb),6)}`;
+
+}else if(za>=0){
+
+work=`P = A(zᵦ) − A(zₐ) = ${fmt(A(zb),6)} − ${fmt(A(za),6)}`;
+
+}else{
+
+work=`P = A(|zₐ|) − A(|zᵦ|) = ${fmt(A(za),6)} − ${fmt(A(zb),6)}`;
+
+}
+
+steps.push(row(
+'5. Required probability',
+work,
+fmt(p,6)+' = '+percent(p)
+));
+
+steps.push(row(
+'CDF verification',
+`Φ(zᵦ) − Φ(zₐ) = ${fmt(pb,6)} − ${fmt(pa,6)}`,
+fmt(p,6)
+));
+
+}else if(e==='less'){
+
+p=pa;
+
+regions=[[mu-4.2*s,a,'#168b8d',.35]];
+
+let work=za<0
+?`P(X ≤ a) = 0.5 − A(|zₐ|) = 0.5 − ${fmt(A(za),6)}`
+:`P(X ≤ a) = 0.5 + A(zₐ) = 0.5 + ${fmt(A(za),6)}`;
+
+steps.push(row('3. Z-table area',table(za),fmt(A(za),6)));
+
+steps.push(row(
+'4. Required probability',
+work,
+fmt(p,6)+' = '+percent(p)
+));
+
+steps.push(row(
+'CDF verification',
+`Φ(${fmt(za,4)})`,
+fmt(pa,6)
+));
+
+}else if(e==='greater'){
+
+p=1-pa;
+
+regions=[[a,mu+4.2*s,'#168b8d',.35]];
+
+let work=za>=0
+?`P(X ≥ a) = 0.5 − A(zₐ) = 0.5 − ${fmt(A(za),6)}`
+:`P(X ≥ a) = 0.5 + A(|zₐ|) = 0.5 + ${fmt(A(za),6)}`;
+
+steps.push(row('3. Z-table area',table(za),fmt(A(za),6)));
+
+steps.push(row(
+'4. Required probability',
+work,
+fmt(p,6)+' = '+percent(p)
+));
+
+steps.push(row(
+'CDF verification',
+`1 − Φ(${fmt(za,4)})`,
+fmt(p,6)
+));
+
+}else{
+
+p=pa+(1-pb);
+
+regions=[
+[mu-4.2*s,a,'#168b8d',.35],
+[b,mu+4.2*s,'#168b8d',.35]
+];
+
+steps.push(row(
+'4. Z-table areas',
+`${table(za)}; ${table(zb)}`,
+`${fmt(A(za),6)}; ${fmt(A(zb),6)}`
+));
+
+steps.push(row(
+'5. Required probability',
+`P(outside) = Φ(zₐ) + [1 − Φ(zᵦ)]`,
+fmt(p,6)+' = '+percent(p)
+));
+
+}
+
+$('zaOut').textContent=fmt(za,4);
+
+$('zbOut').textContent=
+(e==='less'||e==='greater')?'—':fmt(zb,4);
+
+$('probOut').textContent=fmt(p,6);
+$('percentOut').textContent=percent(p);
+
+$('solverSteps').innerHTML=steps.join('');
+
+$('solverInterpret').innerHTML=`
+<strong>Answer:</strong> The probability of the selected event is
+<strong>${fmt(p,6)}</strong>, or <strong>${percent(p)}</strong>.
+This means approximately ${percent(p)} of observations from this
+normal distribution are expected to satisfy the selected condition.
+`;
+
+let marks=[{x:a,label:'a',color:'#efa52c'}];
+
+if(e!=='less'&&e!=='greater')
+marks.push({x:b,label:'b',color:'#d85d64'});
+
+drawNormal('solverChart',mu,s,regions,{values:marks});
+
+}catch(err){
+
+showError('solverError',err.message);
+
+}
+
+}
+
 $('solve').addEventListener('click',solve);
-$('example').addEventListener('click',()=>{$('mu').value=30;$('sigma').value=5;$('event').value='between';$('a').value=26;$('b').value=40;updateEventFields();solve()});
-$('clear').addEventListener('click',()=>{$('mu').value=0;$('sigma').value=1;$('event').value='between';$('a').value=-1;$('b').value=1;updateEventFields();solve()});
-['mu','sigma','a','b'].forEach(id=>$(id).addEventListener('change',solve));
-function qsolve(){
- try{
-  let target=Number($('target').value),mu=Number($('qmu').value),v=Number($('variance').value),l=Number($('lower').value),u=Number($('upper').value);
-  if(![target,mu,v,l,u].every(Number.isFinite)||v<=0)throw Error('Enter valid values. Variance must be greater than zero.');
-  if(l>=u)throw Error('Invalid limits: lower specification limit must be strictly less than upper specification limit.');
-  hideError('qError');let s=Math.sqrt(v),zl=(l-mu)/s,zu=(u-mu)/s,pl=Phi(zl),pu=1-Phi(zu),pw=1-pl-pu,d=pl+pu,dens=pdf(target,mu,s);
-  $('qSigma').textContent=fmt(s,6)+' mm';$('qWithin').textContent=percent(pw);$('qBelow').textContent=percent(pl);$('qAbove').textContent=percent(pu);$('qDefect').textContent=percent(d);$('qDensity').textContent=fmt(dens,6)+' mm⁻¹';
-  $('qSteps').innerHTML=[
-   row('1. Standard deviation','σ = √variance = √'+fmt(v,8),fmt(s,6)+' mm'),
-   row('2. Lower Z-score',`zL = (${l} − ${mu}) / ${fmt(s,6)}`,fmt(zl,4)),
-   row('3. Upper Z-score',`zU = (${u} − ${mu}) / ${fmt(s,6)}`,fmt(zu,4)),
-   row('4. Below lower limit',`P(X < L) = Φ(${fmt(zl,4)})`,percent(pl)),
-   row('5. Within limits',`Φ(${fmt(zu,4)}) − Φ(${fmt(zl,4)}) = ${fmt(1-pu,6)} − ${fmt(pl,6)}`,percent(pw)),
-   row('6. Above upper limit',`P(X > U) = 1 − Φ(${fmt(zu,4)})`,percent(pu)),
-   row('7. Total defective',`P(defective) = ${fmt(pl,6)} + ${fmt(pu,6)}`,percent(d)),
-   row('8. Density at target',`f(${target}) = exp(−z²/2) / (σ√(2π))`,fmt(dens,6)+' mm⁻¹')
-  ].join('');
-  $('qInterpret').innerHTML=`About <strong>${percent(pw)}</strong> of shafts are expected to meet specifications, while <strong>${percent(d)}</strong> may be defective.`;
-  drawNormal('qualityChart',mu,s,[[mu-4.2*s,l,'#efa52c',.4],[l,u,'#168b8d',.28],[u,mu+4.2*s,'#d85d64',.35]],{values:[{x:l,label:'LSL',color:'#efa52c'},{x:u,label:'USL',color:'#d85d64'}]});
- }catch(err){showError('qError',err.message)}
-}
-$('qsolve').addEventListener('click',qsolve);
-$('qreset').addEventListener('click',()=>{Object.entries({target:10,qmu:10,variance:.0025,lower:9.9,upper:10.1}).forEach(([k,v])=>$(k).value=v);qsolve()});
-['target','qmu','variance','lower','upper'].forEach(id=>$(id).addEventListener('change',qsolve));
+
+$('example').addEventListener('click',()=>{
+
+$('mu').value=30;
+$('sigma').value=5;
+$('event').value='between';
+$('a').value=26;
+$('b').value=40;
+
+updateEventFields();
+solve();
+
+});
+
+$('clear').addEventListener('click',()=>{
+
+$('mu').value=0;
+$('sigma').value=1;
+$('event').value='between';
+$('a').value=-1;
+$('b').value=1;
+
+updateEventFields();
+solve();
+
+});
+
+['mu','sigma','a','b'].forEach(id=>{
+$(id).addEventListener('change',solve);
+});
+
+
+/* =================================
+   MODULE 2: EXPONENTIAL DISTRIBUTION
+================================= */
 
 function expSolve(){
- try{
-  const rate=Number($('lambdaRate').value),t=Number($('timeT').value),t1=Number($('timeT1').value),t2=Number($('timeT2').value);
-  if(![rate,t,t1,t2].every(Number.isFinite))throw Error('Please enter valid numbers in all exponential distribution inputs.');
-  if(rate<=0)throw Error('Arrival rate λ must be greater than zero.');
-  if(t<0||t1<0||t2<0)throw Error('Time values cannot be negative.');
-  if(t2<t1)throw Error('Invalid conditional times: t₂ must be greater than or equal to t₁.');
-  hideError('expError');
-  const lam=rate/60,mean=1/lam,variance=1/(lam*lam);
-  const cdf=1-Math.exp(-lam*t),surv=Math.exp(-lam*t),conditional=Math.exp(-lam*(t2-t1));
-  $('expRateSec').textContent=fmt(lam,6)+' s⁻¹';
-  $('expMean').textContent=fmt(mean,4)+' s';
-  $('expVariance').textContent=fmt(variance,4)+' s²';
-  $('expCDF').textContent=fmt(cdf,6)+' ('+percent(cdf)+')';
-  $('expSurvival').textContent=fmt(surv,6)+' ('+percent(surv)+')';
-  $('expConditional').textContent=fmt(conditional,6)+' ('+percent(conditional)+')';
-  $('expSteps').innerHTML=[
-   row('1. Given arrival rate',`λ = ${rate} requests/minute`,`${rate} requests/min`),
-   row('2. Convert rate to seconds',`λ = ${rate} / 60`,fmt(lam,6)+' requests/s'),
-   row('3. Mean inter-arrival time',`E(T) = 1 / λ = 1 / ${fmt(lam,6)}`,fmt(mean,6)+' s'),
-   row('4. Variance',`Var(T) = 1 / λ² = 1 / (${fmt(lam,6)})²`,fmt(variance,6)+' s²'),
-   row('5. Probability within threshold',`P(T ≤ ${t}) = 1 − e^(−${fmt(lam,6)} × ${t})`,fmt(cdf,6)+' = '+percent(cdf)),
-   row('6. Probability after threshold',`P(T > ${t}) = e^(−${fmt(lam,6)} × ${t})`,fmt(surv,6)+' = '+percent(surv)),
-   row('7. Memoryless conditional probability',`P(T > ${t2} | T > ${t1}) = e^(−${fmt(lam,6)} × (${t2} − ${t1}))`,fmt(conditional,6)+' = '+percent(conditional))
-  ].join('');
-  $('expInterpret').innerHTML=`At an arrival rate of <strong>${rate} requests per minute</strong>, the mean time between requests is <strong>${fmt(mean,3)} seconds</strong>. The probability that the next request arrives within ${t} seconds is <strong>${percent(cdf)}</strong>. The probability it takes longer than ${t} seconds is <strong>${percent(surv)}</strong>. The conditional probability is calculated using the memoryless property. This model describes request arrival intervals, not server processing or response time.`;
-  drawExponential(lam,t);
- }catch(err){showError('expError',err.message)}
+
+try{
+
+const rate=Number($('lambdaRate').value);
+const t=Number($('timeT').value);
+const t1=Number($('timeT1').value);
+const t2=Number($('timeT2').value);
+
+if(![rate,t,t1,t2].every(Number.isFinite))
+throw Error('Please enter valid numbers in all exponential distribution inputs.');
+
+if(rate<=0)
+throw Error('Arrival rate λ must be greater than zero.');
+
+if(t<0||t1<0||t2<0)
+throw Error('Time values cannot be negative.');
+
+if(t2<t1)
+throw Error('Invalid conditional times: t₂ must be greater than or equal to t₁.');
+
+hideError('expError');
+
+const lam=rate/60;
+const mean=1/lam;
+const variance=1/(lam*lam);
+
+const cdf=1-Math.exp(-lam*t);
+const surv=Math.exp(-lam*t);
+const conditional=Math.exp(-lam*(t2-t1));
+
+$('expRateSec').textContent=fmt(lam,6)+' s⁻¹';
+$('expMean').textContent=fmt(mean,4)+' s';
+$('expVariance').textContent=fmt(variance,4)+' s²';
+
+$('expCDF').textContent=fmt(cdf,6)+' ('+percent(cdf)+')';
+$('expSurvival').textContent=fmt(surv,6)+' ('+percent(surv)+')';
+
+$('expConditional').textContent=
+fmt(conditional,6)+' ('+percent(conditional)+')';
+
+$('expSteps').innerHTML=[
+
+row('1. Given arrival rate',
+`λ = ${rate} requests/minute`,
+`${rate} requests/min`),
+
+row('2. Convert rate to seconds',
+`λ = ${rate} / 60`,
+fmt(lam,6)+' requests/s'),
+
+row('3. Mean inter-arrival time',
+`E(T) = 1 / λ = 1 / ${fmt(lam,6)}`,
+fmt(mean,6)+' s'),
+
+row('4. Variance',
+`Var(T) = 1 / λ² = 1 / (${fmt(lam,6)})²`,
+fmt(variance,6)+' s²'),
+
+row('5. Probability within threshold',
+`P(T ≤ ${t}) = 1 − e^(−${fmt(lam,6)} × ${t})`,
+fmt(cdf,6)+' = '+percent(cdf)),
+
+row('6. Probability after threshold',
+`P(T > ${t}) = e^(−${fmt(lam,6)} × ${t})`,
+fmt(surv,6)+' = '+percent(surv)),
+
+row('7. Memoryless conditional probability',
+`P(T > ${t2} | T > ${t1}) = e^(−${fmt(lam,6)} × (${t2} − ${t1}))`,
+fmt(conditional,6)+' = '+percent(conditional))
+
+].join('');
+
+$('expInterpret').innerHTML=`
+At an arrival rate of <strong>${rate} requests per minute</strong>,
+the mean time between requests is <strong>${fmt(mean,3)} seconds</strong>.
+The probability that the next request arrives within ${t} seconds is
+<strong>${percent(cdf)}</strong>. The probability it takes longer than
+${t} seconds is <strong>${percent(surv)}</strong>.
+The conditional probability is calculated using the memoryless property.
+This model describes request arrival intervals, not server processing
+or response time.
+`;
+
+drawExponential(lam,t);
+
+}catch(err){
+
+showError('expError',err.message);
+
 }
+
+}
+
+
 function drawExponential(lam,t){
- const svg=$('expChart'),W=760,H=390,L=62,R=24,T=22,B=55,base=H-B;
- const xmax=Math.max(6/lam,t*1.7,1),ymax=lam*1.08;
- const X=x=>L+x/xmax*(W-L-R),Y=y=>base-y/ymax*(H-T-B-10);
- const path=arr=>arr.map((p,i)=>(i?'L':'M')+p[0].toFixed(2)+','+p[1].toFixed(2)).join(' ');
- let grid='';for(let i=0;i<=4;i++){let y=base-(H-T-B-10)*i/4;grid+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#e8edf2" stroke-dasharray="4 5"/><text x="${L-10}" y="${y+4}" text-anchor="end" font-size="11" fill="#82909c">${(ymax*i/4).toFixed(3)}</text>`}
- const n=240,pts=[];for(let i=0;i<=n;i++){let x=xmax*i/n;pts.push([X(x),Y(lam*Math.exp(-lam*x))])}
- function area(a,b,color,opacity){a=Math.max(0,a);b=Math.min(xmax,b);if(b<=a)return '';let p=[[X(a),base]];for(let i=0;i<=100;i++){let x=a+(b-a)*i/100;p.push([X(x),Y(lam*Math.exp(-lam*x))])}p.push([X(b),base]);return `<path d="${path(p)} Z" fill="${color}" opacity="${opacity}"/>`}
- const split=Math.min(t,xmax);
- let ticks=[0,xmax/4,xmax/2,3*xmax/4,xmax].map(x=>`<text x="${X(x)}" y="${base+20}" text-anchor="middle" font-size="11" fill="#657587">${x.toFixed(2)}</text>`).join('');
- svg.innerHTML=grid+area(0,split,'#168b8d',.32)+area(split,xmax,'#efa52c',.30)+`<path d="${path(pts)}" fill="none" stroke="#168b8d" stroke-width="3"/>`+
- `<line x1="${X(t)}" y1="${Y(lam*Math.exp(-lam*t))}" x2="${X(t)}" y2="${base}" stroke="#183653" stroke-width="2" stroke-dasharray="5 4"/>`+
- `<text x="${Math.min(W-R-28,Math.max(L+25,X(t)))}" y="${base-10}" text-anchor="middle" font-size="12" fill="#183653">t = ${t}s</text>`+
- `<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#8b99a7"/>${ticks}`+
- `<text x="${(L+W-R)/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="#64748b">Inter-arrival time (seconds)</text>`+
- `<text x="17" y="${H/2}" transform="rotate(-90 17 ${H/2})" text-anchor="middle" font-size="12" fill="#64748b">Probability density (per second)</text>`;
+
+const svg=$('expChart');
+
+const W=760,H=390,L=62,R=24,T=22,B=55;
+const base=H-B;
+
+const xmax=Math.max(6/lam,t*1.7,1);
+const ymax=lam*1.08;
+
+const X=x=>L+x/xmax*(W-L-R);
+const Y=y=>base-y/ymax*(H-T-B-10);
+
+const path=arr=>arr.map((p,i)=>
+(i?'L':'M')+p[0].toFixed(2)+','+p[1].toFixed(2)
+).join(' ');
+
+let grid='';
+
+for(let i=0;i<=4;i++){
+
+let y=base-(H-T-B-10)*i/4;
+
+grid+=`
+<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"
+stroke="#e8edf2" stroke-dasharray="4 5"/>
+
+<text x="${L-10}" y="${y+4}"
+text-anchor="end" font-size="11" fill="#82909c">
+${(ymax*i/4).toFixed(3)}
+</text>`;
+
 }
+
+const n=240;
+const pts=[];
+
+for(let i=0;i<=n;i++){
+
+let x=xmax*i/n;
+
+pts.push([X(x),Y(lam*Math.exp(-lam*x))]);
+
+}
+
+function area(a,b,color,opacity){
+
+a=Math.max(0,a);
+b=Math.min(xmax,b);
+
+if(b<=a)return '';
+
+let p=[[X(a),base]];
+
+for(let i=0;i<=100;i++){
+
+let x=a+(b-a)*i/100;
+
+p.push([X(x),Y(lam*Math.exp(-lam*x))]);
+
+}
+
+p.push([X(b),base]);
+
+return `<path d="${path(p)} Z" fill="${color}" opacity="${opacity}"/>`;
+
+}
+
+const split=Math.min(t,xmax);
+
+let ticks=[0,xmax/4,xmax/2,3*xmax/4,xmax].map(x=>`
+<text x="${X(x)}" y="${base+20}"
+text-anchor="middle" font-size="11" fill="#657587">
+${x.toFixed(2)}
+</text>`).join('');
+
+svg.innerHTML=
+grid+
+area(0,split,'#168b8d',.32)+
+area(split,xmax,'#efa52c',.30)+
+
+`<path d="${path(pts)}" fill="none" stroke="#168b8d" stroke-width="3"/>`
+
++
+
+`<line x1="${X(t)}"
+y1="${Y(lam*Math.exp(-lam*t))}"
+x2="${X(t)}"
+y2="${base}"
+stroke="#183653"
+stroke-width="2"
+stroke-dasharray="5 4"/>`
+
++
+
+`<text x="${Math.min(W-R-28,Math.max(L+25,X(t)))}"
+y="${base-10}"
+text-anchor="middle"
+font-size="12"
+fill="#183653">t = ${t}s</text>`
+
++
+
+`<line x1="${L}" y1="${base}" x2="${W-R}" y2="${base}" stroke="#8b99a7"/>`
+
++
+
+ticks+
+
+`<text x="${(L+W-R)/2}" y="${H-8}"
+text-anchor="middle" font-size="12" fill="#64748b">
+Inter-arrival time (seconds)
+</text>
+
+<text x="17" y="${H/2}"
+transform="rotate(-90 17 ${H/2})"
+text-anchor="middle" font-size="12" fill="#64748b">
+Probability density (per second)
+</text>`;
+
+}
+
 $('expSolve').addEventListener('click',expSolve);
-$('expReset').addEventListener('click',()=>{Object.entries({lambdaRate:12,timeT:5,timeT1:2,timeT2:5}).forEach(([k,v])=>$(k).value=v);expSolve()});
-['lambdaRate','timeT','timeT1','timeT2'].forEach(id=>$(id).addEventListener('change',expSolve));
-function showModule(which){
- const ids=['solver','exponential','quality'];
- ids.forEach(id=>$(id).classList.toggle('hidden',id!==which));
- $('solverTab').classList.toggle('active',which==='solver');
- $('expTab').classList.toggle('active',which==='exponential');
- $('qualityTab').classList.toggle('active',which==='quality');
+
+$('expReset').addEventListener('click',()=>{
+
+Object.entries({
+lambdaRate:12,
+timeT:5,
+timeT1:2,
+timeT2:5
+}).forEach(([k,v])=>$(k).value=v);
+
+expSolve();
+
+});
+
+['lambdaRate','timeT','timeT1','timeT2'].forEach(id=>{
+$(id).addEventListener('change',expSolve);
+});
+
+
+/* =================================
+   MODULE 3: QUALITY CONTROL
+================================= */
+
+function qsolve(){
+
+try{
+
+let target=Number($('target').value);
+let mu=Number($('qmu').value);
+let v=Number($('variance').value);
+let l=Number($('lower').value);
+let u=Number($('upper').value);
+
+if(![target,mu,v,l,u].every(Number.isFinite)||v<=0)
+throw Error('Enter valid values. Variance must be greater than zero.');
+
+if(l>=u)
+throw Error('Invalid limits: lower specification limit must be strictly less than upper specification limit.');
+
+hideError('qError');
+
+let s=Math.sqrt(v);
+
+let zl=(l-mu)/s;
+let zu=(u-mu)/s;
+
+let pl=Phi(zl);
+let pu=1-Phi(zu);
+
+let pw=1-pl-pu;
+let d=pl+pu;
+
+let dens=pdf(target,mu,s);
+
+$('qSigma').textContent=fmt(s,6)+' mm';
+$('qWithin').textContent=percent(pw);
+$('qBelow').textContent=percent(pl);
+$('qAbove').textContent=percent(pu);
+$('qDefect').textContent=percent(d);
+$('qDensity').textContent=fmt(dens,6)+' mm⁻¹';
+
+$('qSteps').innerHTML=[
+
+row('1. Standard deviation',
+'σ = √variance = √'+fmt(v,8),
+fmt(s,6)+' mm'),
+
+row('2. Lower Z-score',
+`zL = (${l} − ${mu}) / ${fmt(s,6)}`,
+fmt(zl,4)),
+
+row('3. Upper Z-score',
+`zU = (${u} − ${mu}) / ${fmt(s,6)}`,
+fmt(zu,4)),
+
+row('4. Below lower limit',
+`P(X < L) = Φ(${fmt(zl,4)})`,
+percent(pl)),
+
+row('5. Within limits',
+`Φ(${fmt(zu,4)}) − Φ(${fmt(zl,4)})`,
+percent(pw)),
+
+row('6. Above upper limit',
+`P(X > U) = 1 − Φ(${fmt(zu,4)})`,
+percent(pu)),
+
+row('7. Total defective',
+`P(defective) = ${fmt(pl,6)} + ${fmt(pu,6)}`,
+percent(d)),
+
+row('8. Density at target',
+`f(${target}) = exp(−z²/2) / (σ√(2π))`,
+fmt(dens,6)+' mm⁻¹')
+
+].join('');
+
+$('qInterpret').innerHTML=`
+About <strong>${percent(pw)}</strong> of shafts are expected
+to meet specifications, while <strong>${percent(d)}</strong>
+may be defective.
+`;
+
+drawNormal(
+'qualityChart',
+mu,
+s,
+[
+[mu-4.2*s,l,'#efa52c',.4],
+[l,u,'#168b8d',.28],
+[u,mu+4.2*s,'#d85d64',.35]
+],
+{
+values:[
+{x:l,label:'LSL',color:'#efa52c'},
+{x:u,label:'USL',color:'#d85d64'}
+]
 }
+);
+
+}catch(err){
+
+showError('qError',err.message);
+
+}
+
+}
+
+$('qsolve').addEventListener('click',qsolve);
+
+$('qreset').addEventListener('click',()=>{
+
+Object.entries({
+target:10,
+qmu:10,
+variance:.0025,
+lower:9.9,
+upper:10.1
+}).forEach(([k,v])=>$(k).value=v);
+
+qsolve();
+
+});
+
+['target','qmu','variance','lower','upper'].forEach(id=>{
+$(id).addEventListener('change',qsolve);
+});
+
+
+/* =================================
+   MODULE 4: CENTRAL LIMIT THEOREM
+================================= */
+
+function updateCLTFields(){
+
+let e=$('cltEvent').value;
+
+$('cltBWrap').classList.toggle(
+'hidden',
+e!=='between'
+);
+
+$('cltAWrap').querySelector('label').textContent=
+e==='greater'?'Average time (a), lower threshold':
+'Average time (a), upper threshold';
+
+}
+
+$('cltEvent').addEventListener('change',updateCLTFields);
+
+
+function cltSolve(){
+
+try{
+
+const mu=Number($('cltMu').value);
+const sigma=Number($('cltSigma').value);
+const n=Number($('cltN').value);
+const a=Number($('cltA').value);
+const b=Number($('cltB').value);
+const event=$('cltEvent').value;
+
+if(![mu,sigma,n,a].every(Number.isFinite)||
+sigma<=0||
+!Number.isInteger(n)||
+n<1){
+
+throw Error(
+'Enter valid values. Standard deviation and sample size must be positive, and sample size must be an integer.'
+);
+
+}
+
+if(event==='between'&&
+(!Number.isFinite(b)||a>=b)){
+
+throw Error(
+'The upper boundary b must be greater than boundary a.'
+);
+
+}
+
+hideError('cltError');
+
+
+/* Standard error */
+
+const se=sigma/Math.sqrt(n);
+
+
+/* Z scores */
+
+const za=(a-mu)/se;
+const zb=(b-mu)/se;
+
+
+/* CDF values */
+
+const pa=Phi(za);
+const pb=Phi(zb);
+
+
+let probability=0;
+let regions=[];
+let steps=[];
+
+
+/* Z-table area */
+
+const table=z=>
+`A(${fmt(Math.abs(z),4)}) = ${fmt(A(z),6)}`;
+
+
+/* Step 1 */
+
+steps.push(row(
+'1. Given values',
+`Population mean μ = ${mu}, standard deviation σ = ${sigma}, sample size n = ${n}`,
+`n = ${n}`
+));
+
+
+/* Step 2 */
+
+steps.push(row(
+'2. Standard error',
+`SE = σ / √n = ${sigma} / √${n}`,
+fmt(se,6)+' minutes'
+));
+
+
+/* Step 3 */
+
+steps.push(row(
+'3. Standardize boundary a',
+`zₐ = (a − μ) / SE = (${a} − ${mu}) / ${fmt(se,6)}`,
+fmt(za,4)
+));
+
+
+/* BETWEEN TWO VALUES */
+
+if(event==='between'){
+
+probability=pb-pa;
+
+regions=[[a,b,'#168b8d',.35]];
+
+steps.push(row(
+'4. Standardize boundary b',
+`zᵦ = (b − μ) / SE = (${b} − ${mu}) / ${fmt(se,6)}`,
+fmt(zb,4)
+));
+
+steps.push(row(
+'5. Z-table area at a',
+table(za),
+fmt(A(za),6)
+));
+
+steps.push(row(
+'6. Z-table area at b',
+table(zb),
+fmt(A(zb),6)
+));
+
+let working;
+
+if(za<0&&zb>0){
+
+working=
+`P = A(|zₐ|) + A(zᵦ) = ${fmt(A(za),6)} + ${fmt(A(zb),6)}`;
+
+}else if(za>=0){
+
+working=
+`P = A(zᵦ) − A(zₐ) = ${fmt(A(zb),6)} − ${fmt(A(za),6)}`;
+
+}else{
+
+working=
+`P = A(|zₐ|) − A(|zᵦ|) = ${fmt(A(za),6)} − ${fmt(A(zb),6)}`;
+
+}
+
+steps.push(row(
+'7. Required probability',
+working,
+fmt(probability,6)+' = '+percent(probability)
+));
+
+}
+
+
+/* LESS THAN A VALUE */
+
+else if(event==='less'){
+
+probability=pa;
+
+regions=[
+[mu-4.2*se,a,'#168b8d',.35]
+];
+
+const working=za<0
+?`P(X̄ ≤ a) = 0.5 − A(|zₐ|) = 0.5 − ${fmt(A(za),6)}`
+:`P(X̄ ≤ a) = 0.5 + A(zₐ) = 0.5 + ${fmt(A(za),6)}`;
+
+steps.push(row(
+'4. Z-table area',
+table(za),
+fmt(A(za),6)
+));
+
+steps.push(row(
+'5. Required probability',
+working,
+fmt(probability,6)+' = '+percent(probability)
+));
+
+steps.push(row(
+'6. CDF verification',
+`Φ(${fmt(za,4)})`,
+fmt(pa,6)
+));
+
+}
+
+
+/* GREATER THAN A VALUE */
+
+else{
+
+probability=1-pa;
+
+regions=[
+[a,mu+4.2*se,'#168b8d',.35]
+];
+
+const working=za>=0
+?`P(X̄ ≥ a) = 0.5 − A(zₐ) = 0.5 − ${fmt(A(za),6)}`
+:`P(X̄ ≥ a) = 0.5 + A(|zₐ|) = 0.5 + ${fmt(A(za),6)}`;
+
+steps.push(row(
+'4. Z-table area',
+table(za),
+fmt(A(za),6)
+));
+
+steps.push(row(
+'5. Required probability',
+working,
+fmt(probability,6)+' = '+percent(probability)
+));
+
+steps.push(row(
+'6. CDF verification',
+`1 − Φ(${fmt(za,4)})`,
+fmt(probability,6)
+));
+
+}
+
+
+/* DISPLAY RESULTS */
+
+$('cltSE').textContent=fmt(se,4)+' min';
+
+$('cltZA').textContent=fmt(za,4);
+
+$('cltZB').textContent=
+event==='between'?fmt(zb,4):'—';
+
+$('cltProbability').textContent=
+fmt(probability,6);
+
+$('cltSteps').innerHTML=steps.join('');
+
+
+/* INTERPRETATION */
+
+let condition=
+event==='between'
+?`between ${a} and ${b} minutes`
+:event==='less'
+?`less than or equal to ${a} minutes`
+:`greater than or equal to ${a} minutes`;
+
+$('cltInterpret').innerHTML=`
+
+<strong>Result:</strong>
+
+The probability that the average processing time of a random
+sample of <strong>${n} warehouse orders</strong> is
+<strong>${condition}</strong> is
+<strong>${fmt(probability,6)}</strong>, or
+<strong>${percent(probability)}</strong>.
+
+The standard error of the sample mean is
+<strong>${fmt(se,4)} minutes</strong>.
+
+`;
+
+
+/* CHART */
+
+const marks=[
+{x:a,label:'a',color:'#efa52c'}
+];
+
+if(event==='between'){
+
+marks.push({
+x:b,
+label:'b',
+color:'#d85d64'
+});
+
+}
+
+drawNormal(
+'cltChart',
+mu,
+se,
+regions,
+{values:marks}
+);
+
+}catch(err){
+
+showError('cltError',err.message);
+
+}
+
+}
+
+
+/* CLT BUTTONS */
+
+$('cltSolve').addEventListener('click',cltSolve);
+
+
+$('cltExample').addEventListener('click',()=>{
+
+$('cltMu').value=30;
+$('cltSigma').value=8;
+$('cltN').value=36;
+$('cltEvent').value='between';
+$('cltA').value=28;
+$('cltB').value=32;
+
+updateCLTFields();
+cltSolve();
+
+});
+
+
+$('cltReset').addEventListener('click',()=>{
+
+$('cltMu').value=30;
+$('cltSigma').value=8;
+$('cltN').value=36;
+$('cltEvent').value='between';
+$('cltA').value=28;
+$('cltB').value=32;
+
+updateCLTFields();
+cltSolve();
+
+});
+
+
+['cltMu','cltSigma','cltN','cltA','cltB'].forEach(id=>{
+
+$(id).addEventListener('change',cltSolve);
+
+});
+
+
+/* =================================
+   MODULE SWITCHING
+================================= */
+
+function showModule(which){
+
+const ids=[
+'solver',
+'exponential',
+'quality',
+'clt'
+];
+
+ids.forEach(id=>{
+
+$(id).classList.toggle(
+'hidden',
+id!==which
+);
+
+});
+
+
+$('solverTab').classList.toggle(
+'active',
+which==='solver'
+);
+
+$('expTab').classList.toggle(
+'active',
+which==='exponential'
+);
+
+$('qualityTab').classList.toggle(
+'active',
+which==='quality'
+);
+
+$('cltTab').classList.toggle(
+'active',
+which==='clt'
+);
+
+}
+
+
+/* TOP TABS */
+
 $('solverTab').onclick=()=>showModule('solver');
+
 $('expTab').onclick=()=>showModule('exponential');
+
 $('qualityTab').onclick=()=>showModule('quality');
-updateEventFields();solve();qsolve();expSolve();
-</script></body></html>
+
+$('cltTab').onclick=()=>showModule('clt');
+
+
+/* =================================
+   FUNCTIONAL SIDEBAR NAVIGATION
+================================= */
+
+document.querySelectorAll('nav a').forEach(link=>{
+
+link.addEventListener('click',function(e){
+
+e.preventDefault();
+
+const destination=this.getAttribute('href');
+
+const modules={
+
+'#home':'solver',
+'#solver':'solver',
+'#exponential':'exponential',
+'#quality':'quality',
+'#clt':'clt',
+'#method':'solver'
+
+};
+
+const module=modules[destination];
+
+if(!module)return;
+
+
+/* Switch module */
+
+showModule(module);
+
+
+/* Update sidebar active state */
+
+document.querySelectorAll('nav a').forEach(a=>{
+
+a.classList.remove('active');
+
+});
+
+this.classList.add('active');
+
+
+/* Scroll to selected destination */
+
+if(destination==='#method'){
+
+$('method').scrollIntoView({
+behavior:'smooth',
+block:'start'
+});
+
+}else if(destination==='#home'){
+
+$('home').scrollIntoView({
+behavior:'smooth',
+block:'start'
+});
+
+}else{
+
+$(module).scrollIntoView({
+behavior:'smooth',
+block:'start'
+});
+
+}
+
+});
+
+});
+
+
+/* =================================
+   INITIAL CALCULATIONS
+================================= */
+
+updateEventFields();
+
+solve();
+
+qsolve();
+
+expSolve();
+
+updateCLTFields();
+
+cltSolve();
+
+</script>
+
+</body>
+</html>
